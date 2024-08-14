@@ -1,5 +1,3 @@
-
-
 import { Schema, model } from "mongoose";
 import { TUser } from "./user.interface";
 const userSchema = new Schema<TUser>({
@@ -7,7 +5,7 @@ const userSchema = new Schema<TUser>({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     phone: { type: String, required: true },
-    role: { type: String, enum: ["Admin", "user"] },
+    role: { type: String, enum: ["admin", "user"] },
     address: { type: String, required: true },
-})
+}, { timestamps: true });
 export const UserModel = model<TUser>("user", userSchema);
