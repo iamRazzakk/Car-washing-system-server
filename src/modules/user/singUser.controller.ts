@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { UserModel } from "./user.model"
+import { UserModel } from "./singUser.model"
 import sendResponse from "../../utils/sendResponse"
 import httpStatus from "http-status"
 

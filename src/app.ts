@@ -1,10 +1,12 @@
+import cors from "cors";
 import express, { Application, Request, Response } from "express"
-import { UserRoute } from "./modules/user/user.route";
+import { Routers } from "./router";
 const app: Application = express()
 // parser 
 app.use(express.json())
-// this route come from user route
-app.use('/api/auth/signup', UserRoute)
+app.use(cors());
+// this is the main route for this application
+app.use('/api', Routers)
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
