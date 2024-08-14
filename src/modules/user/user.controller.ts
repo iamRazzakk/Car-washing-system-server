@@ -1,24 +1,27 @@
 import { Request, Response } from "express"
 import { UserModel } from "./user.model"
+import sendResponse from "../../utils/sendResponse"
+import httpStatus from "http-status"
 
 const createUser = async (req: Request, res: Response) => {
     try {
 
         const userData = req.body
         const result = await UserModel.create(userData)
-        res.json({
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
             success: true,
-            statusCode: 200,
-            message: "User registered successfully",
+            message: "User register successfully",
+            token: "",
             data: result
-        });
+        })
     } catch (error) {
-        res.status(500).json({
+        sendResponse(res, {
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR,
             success: false,
-            statusCode: 500,
-            message: "An error occurred",
+            message: "An error occurred from user controller",
             data: error
-        });
+        })
     }
 
 }
