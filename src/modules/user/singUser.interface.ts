@@ -6,6 +6,5 @@ export type TUser = {
     phone: string,
     role: userRole,
     address: string,
-    createdAt?: Date;
-    updatedAt?: Date;
+    passwordCreatedAt?: Date
 } 

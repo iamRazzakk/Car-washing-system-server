@@ -3,10 +3,12 @@ export type UserRole = "admin" | "user";
 
 const passwordSchema = z.string({
     required_error: "Password is required",
-    invalid_type_error: "Password must be string"
-}).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-    "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
-)
+    invalid_type_error: "Password must be a string"
+}).regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`])[A-Za-z\d!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`]{8,}$/,
+    "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+);
+
 const createSignUpValidationSchema = z.object({
     body: z.object({
         name: z.string({
