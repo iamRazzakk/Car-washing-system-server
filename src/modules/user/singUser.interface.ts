@@ -1,5 +1,5 @@
 type userRole = "admin" | "user"
-export type TUser = {
+export type TSingUpUser = {
     name: string,
     email: string,
     password: string,

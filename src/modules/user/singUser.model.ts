@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { TUser } from "./singUser.interface";
 import bcrypt from "bcrypt";
-const userSchema = new Schema<TUser>({
+import { TSingUpUser } from "./singUser.interface";
+const userSchema = new Schema<TSingUpUser>({
     name: {
         type: String,
         required: [true, "Name is required"],
@@ -38,4 +38,4 @@ userSchema.pre("save", async function (next) {
 
 
 
-export const UserModel = model<TUser>("user", userSchema);
+export const UserModel = model<TSingUpUser>("user", userSchema);

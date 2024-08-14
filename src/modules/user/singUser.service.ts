@@ -1,7 +1,7 @@
-import { TUser } from "./singUser.interface"
+import { TSingUpUser } from "./singUser.interface"
 import { UserModel } from "./singUser.model"
 
-const createUser = async (payload: TUser) => {
+const createUser = async (payload: TSingUpUser) => {
     const result = await UserModel.create(payload)
     return result
 }
