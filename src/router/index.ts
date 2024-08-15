@@ -19,6 +19,10 @@ const appRouterModel = [
         routerFile: carSloteRouter
     },
     {
+        path: '/slots/availability',
+        routerFile: carSloteRouter
+    },
+    {
         path: "/auth",
         routerFile: logingRouter
     }

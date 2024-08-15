@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import httpStatus from "http-status";
 import AppError from "../../utils/AppError";
 import { CarServiceModel } from "../service/carServiceModel";
@@ -29,6 +29,19 @@ const createSlotIntoDB = async (payload: TServiceSchedule) => {
     }
 
 }
+// get all avaiable slot from db
+const getAllAvailableSlotFromDB = async () => {
+    //! Populate fills in the referenced data from another collection. In this case, it fetches the full details of the service document referenced by service in carSlotBookingSlot.
+
+    //* why use itTo get complete information about the service instead of just its ObjectId.
+
+    const result = await carSlotBookingSlot.find({ isBooked: "available" }).populate("service")
+    if (result.length === 0) {
+        throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
+    }
+    return result
+}
 export const carServiceSlot = {
-    createSlotIntoDB
+    createSlotIntoDB,
+    getAllAvailableSlotFromDB
 }
