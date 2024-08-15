@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+
 const createCarServiceValidationSchema = z.object({
     body: z.object({
         name: z.string({
@@ -25,7 +26,9 @@ const createCarServiceValidationSchema = z.object({
             .optional(),
     })
 });
+// Get Single car service form database
+
 
 export const CarServiceValidation = {
-    createCarServiceValidationSchema
+    createCarServiceValidationSchema,
 };
