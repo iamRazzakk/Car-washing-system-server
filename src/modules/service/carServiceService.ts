@@ -35,6 +35,7 @@ const getAllCarServiceFromDB = async () => {
     }
     return serviceData
 }
+// update single car service from database
 const updateSingleCarServiceIntoDB = async (id: string,
     payload: Partial<TCreateService>,) => {
     const serviceData = await CarServiceModel.findByIdAndUpdate(id,
@@ -48,9 +49,25 @@ const updateSingleCarServiceIntoDB = async (id: string,
     return serviceData
 }
 
+// delete sing car service from database
+const deleteSingleCarServiceFromDB = async (id: string) => {
+    const serviceData = await CarServiceModel.findByIdAndUpdate(id, {
+        isDeleted: true,
+    },
+        {
+            new: true,
+            runValidators: true,
+        })
+    if (!serviceData) {
+        throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
+    }
+    return serviceData
+}
+
 export const carServiceServices = {
     createCarServiceIntoDB,
     getSingleCarServiceFromDB,
     getAllCarServiceFromDB,
-    updateSingleCarServiceIntoDB
+    updateSingleCarServiceIntoDB,
+    deleteSingleCarServiceFromDB
 }

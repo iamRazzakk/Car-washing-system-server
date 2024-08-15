@@ -49,10 +49,22 @@ const updateSingleCarService = catchAsync(async (req: Request, res: Response) =>
         data: serviceData,
     });
 })
+//  delete data form database
+const deleteSingleCarService = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const serviceData = await carServiceServices.deleteSingleCarServiceFromDB(id)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Service deleted successfully",
+        data: serviceData,
+    });
 
+})
 export const carServiceController = {
     createService,
     getServiceById,
     getAllCarService,
-    updateSingleCarService
+    updateSingleCarService,
+    deleteSingleCarService
 }
