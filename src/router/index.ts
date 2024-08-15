@@ -10,7 +10,7 @@ const appRouterModel = [
         routerFile: UserRoute
     },
     {
-        path: '/api',
+        path: '/services',
         routerFile: carServiceRouter
     },
     {

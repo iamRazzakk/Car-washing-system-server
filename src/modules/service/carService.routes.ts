@@ -5,5 +5,5 @@ import { carServiceController } from "./carService.controller"
 
 
 const router = Router()
-router.post('/services', ValidationRequest(CarServiceValidation.createCarServiceValidationSchema), carServiceController.createService)
+router.post('/', ValidationRequest(CarServiceValidation.createCarServiceValidationSchema), carServiceController.createService)
 export const carServiceRouter = router

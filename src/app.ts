@@ -11,5 +11,9 @@ app.use('/api', Routers)
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
 });
+// for test route
+app.get('/test', (req: Request, res: Response) => {
+    res.send("Test route is working!");
+});
 
 export default app;
