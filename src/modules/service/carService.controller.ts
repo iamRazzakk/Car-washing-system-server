@@ -17,6 +17,7 @@ const createService = catchAsync(async (req: Request, res: Response) => {
     });
 })
 const getServiceById = catchAsync(async (req: Request, res: Response) => {
+    // get this data useing id
     const { id } = req.params;
     const serviceData = await carServiceServices.getSingleCarServiceFromDB(id)
     sendResponse(res, {
@@ -26,7 +27,18 @@ const getServiceById = catchAsync(async (req: Request, res: Response) => {
         data: serviceData,
     })
 })
+const getAllCarService = catchAsync(async (req: Request, res: Response) => {
+    const serviceData = await carServiceServices.getAllCarServiceFromDB()
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "Service retrieved successfully",
+        data: serviceData,
+    })
+})
+
 export const carServiceController = {
     createService,
-    getServiceById
+    getServiceById,
+    getAllCarService
 }

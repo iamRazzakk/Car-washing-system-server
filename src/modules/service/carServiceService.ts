@@ -17,6 +17,7 @@ const createCarServiceIntoDB = async (payload: TCreateService) => {
 
     return newService;
 }
+// get single car service data
 const getSingleCarServiceFromDB = async (id: string) => {
     // get data from database using id
     const serviceData = await CarServiceModel.findById(id)
@@ -24,10 +25,19 @@ const getSingleCarServiceFromDB = async (id: string) => {
         throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
     }
     return serviceData
-
-
 }
+
+// get all data from database
+const getAllCarServiceFromDB = async () => {
+    const serviceData = await CarServiceModel.find()
+    if (!serviceData) {
+        throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
+    }
+    return serviceData
+}
+
 export const carServiceServices = {
     createCarServiceIntoDB,
-    getSingleCarServiceFromDB
+    getSingleCarServiceFromDB,
+    getAllCarServiceFromDB
 }
