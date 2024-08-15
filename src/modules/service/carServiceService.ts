@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import AppError from "../../utils/AppError";
+import AppError from "../../error/AppError";
 import { TCreateService } from "./carServiceInterface";
 import { CarServiceModel } from "./carServiceModel";
 

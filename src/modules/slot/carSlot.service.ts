@@ -1,6 +1,6 @@
 
 import httpStatus from "http-status";
-import AppError from "../../utils/AppError";
+import AppError from "../../error/AppError";
 import { CarServiceModel } from "../service/carServiceModel";
 import { TServiceSchedule } from "./carSlot.interface";
 import { GenerateTimeSlots } from "./generateTime.utils";
