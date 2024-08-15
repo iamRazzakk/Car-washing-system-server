@@ -1,25 +1,61 @@
 import bcrypt from 'bcrypt';
 import { UserModel } from "../user/singUser.model";
-import { TUserLogin } from "./auth.interface";
+import { TChangePassoword, TUserLogin } from "./auth.interface";
 import config from '../../config';
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 const LoginUser = async (loginData: TUserLogin) => {
     const { email, password } = loginData;
-    const user = await UserModel.findOne({ email }).select("+password")
-    // if don't match password or email
-    if (!user) throw new Error("Invalid email or password");
+    const user = await UserModel.findOne({ email }).select("+password");
 
-    // verify password
+    if (!user) {
+        throw new Error("Invalid email or password");
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw new Error("Invalid email or password");
+    if (!isMatch) {
+        throw new Error("Invalid email or password");
+    }
+
     const token = jwt.sign(
         { _id: user._id, email: user.email, role: user.role },
-        config.JWT_SECRET,
-        { expiresIn: config.JWT_E_IN }
+        config.JWT_SECRET as string,
+        { expiresIn: config.JWT_E_IN as string }
     );
-    return { user, token }
-}
+
+    return { user, token };
+};
+
+
+const passwordChangeIntoDB = async (payload: TChangePassoword) => {
+    const { email, newPassword, oldPassword } = payload;
+    const user = await UserModel.findOneAndUpdate({ email }).select("+password");
+
+    if (!user) {
+        throw new Error("User does not exist");
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+        throw new Error("Old password is incorrect");
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedNewPassword;
+    const updatedUser = await user.save();
+
+    if (!updatedUser) {
+        throw new Error("Failed to change password");
+    }
+
+    return {
+        success: true,
+        message: "Password changed successfully",
+    };
+};
+
+
 export const AuthService = {
-    LoginUser
+    LoginUser,
+    passwordChangeIntoDB
 }

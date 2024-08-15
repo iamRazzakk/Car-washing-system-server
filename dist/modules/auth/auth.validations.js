@@ -1,0 +1,36 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthValidationSchema = void 0;
+const zod_1 = require("zod");
+const passwordValidationSchema = zod_1.z.string({
+    required_error: "Password is required",
+    invalid_type_error: "Password must be a string"
+}).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`])[A-Za-z\d!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`]{8,}$/, "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character");
+const userLoginValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        email: zod_1.z.string({
+            required_error: "Email is required",
+            invalid_type_error: "Invalid email",
+        }),
+        password: passwordValidationSchema,
+    }),
+});
+const userChangePasswordValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        password: passwordValidationSchema,
+        newPassword: passwordValidationSchema,
+    }),
+});
+const refreshTokenValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        refreshToken: zod_1.z.string({
+            required_error: "Refresh token is required",
+            invalid_type_error: "Invalid refresh token",
+        }),
+    })
+});
+exports.AuthValidationSchema = {
+    userLoginValidationSchema,
+    userChangePasswordValidationSchema,
+    refreshTokenValidationSchema,
+};
