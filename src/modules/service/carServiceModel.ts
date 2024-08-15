@@ -1,32 +1,30 @@
-import { Schema } from "mongoose";
-import { ICarService } from "./carServiceInterface";
 
-const carServiceSchema = new Schema<ICarService>({
+import mongoose, { Schema } from 'mongoose';
+import { TCreateService } from './carServiceInterface';
+
+
+
+const CarServiceSchema: Schema<TCreateService> = new Schema({
     name: {
         type: String,
-        required: [true, "Service name is required"],
-        trim: true
+        required: true
     },
     description: {
         type: String,
-        required: [true, "Service descript is required"],
-        trim: true
+        required: true
     },
     price: {
         type: Number,
-        required: [true, "Price is required"],
-        trim: true
+        required: true
     },
     duration: {
         type: Number,
-        required: [true, "Duration is required"],
-        trim: true
+        required: true
     },
     isDeleted: {
         type: Boolean,
         default: false
     }
-})
-export const carServiceModel = {
-    carServiceSchema
-}
+}, { timestamps: true });
+
+export const CarServiceModel = mongoose.model<TCreateService>('CarService', CarServiceSchema);

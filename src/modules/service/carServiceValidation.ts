@@ -11,8 +11,8 @@ const createCarServiceValidationSchema = z.object({
             invalid_type_error: "Description must be string",
         }),
         price: z.number({
-            required_error: "Price is required",
-            invalid_type_error: "Price must be number",
+            required_error: "Price is required and must be positive number",
+            invalid_type_error: "Price is required and must be positive number",
         }),
         duration: z.number({
             required_error: "Duration is required",
@@ -24,7 +24,8 @@ const createCarServiceValidationSchema = z.object({
             })
             .optional(),
     })
-})
+});
+
 export const CarServiceValidation = {
     createCarServiceValidationSchema
-}
+};
