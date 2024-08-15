@@ -8,8 +8,11 @@ const router = Router()
 // create service route
 router.post('/', ValidationRequest(CarServiceValidation.createCarServiceValidationSchema), carServiceController.createService)
 
-// get service from database useing id
+// get service from database useing id route
 router.get('/:id', carServiceController.getServiceById)
-// get all service from database 
+// get all service from database route
 router.get("/", carServiceController.getAllCarService)
+// update single car service from database route
+router.put('/:id', ValidationRequest(CarServiceValidation.updateCarServiceValidationSchema), carServiceController.updateSingleCarService)
+
 export const carServiceRouter = router

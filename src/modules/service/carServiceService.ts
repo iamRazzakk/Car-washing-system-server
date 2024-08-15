@@ -35,9 +35,22 @@ const getAllCarServiceFromDB = async () => {
     }
     return serviceData
 }
+const updateSingleCarServiceIntoDB = async (id: string,
+    payload: Partial<TCreateService>,) => {
+    const serviceData = await CarServiceModel.findByIdAndUpdate(id,
+        payload, {
+        new: true,
+        runValidators: true,
+    })
+    if (!serviceData) {
+        throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
+    }
+    return serviceData
+}
 
 export const carServiceServices = {
     createCarServiceIntoDB,
     getSingleCarServiceFromDB,
-    getAllCarServiceFromDB
+    getAllCarServiceFromDB,
+    updateSingleCarServiceIntoDB
 }

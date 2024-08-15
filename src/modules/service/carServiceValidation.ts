@@ -27,8 +27,11 @@ const createCarServiceValidationSchema = z.object({
     })
 });
 // Get Single car service form database
-
+const updateCarServiceValidationSchema = z.object({
+    body: createCarServiceValidationSchema.partial(),
+});
 
 export const CarServiceValidation = {
     createCarServiceValidationSchema,
+    updateCarServiceValidationSchema
 };
