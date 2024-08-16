@@ -1,31 +1,39 @@
-import { NextFunction, Request, Response } from "express";
-import catchAsync from "../utils/catchAsync";
-import AppError from "../error/AppError";
+import { Request, Response, NextFunction } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import httpStatus from "http-status";
-import jwt, { JwtPayload } from "jsonwebtoken"
 import config from "../config";
+import AppError from "../error/AppError";
 import { TUserRole } from "../modules/user/singUser.interface";
+import catchAsync from "../utils/catchAsync";
 import { UserModel } from "../modules/user/singUser.model";
+
 const auth = (...requiredUserRole: TUserRole[]) => {
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-        const token = req.headers.authorization
-        if (!token || !token.startsWith("Bearer ")) {
-            throw new AppError(httpStatus.UNAUTHORIZED, 'Your are not Authorized!');
+        const token = req.headers.authorization?.replace("Bearer ", "");
+
+        // Check if token is present
+        if (!token) {
+            return next(new AppError(httpStatus.UNAUTHORIZED, "Bearer token is required"));
         }
-        const tokenValue = token.split(" ")[1]
-        const decoded = jwt.verify(tokenValue, config.JWT_SECRET as string) as { role: string }
-        const { email, role, iat } = decoded;
+
+        // Verify the token
+        const decoded = jwt.verify(token, config.JWT_SECRET as string) as JwtPayload;
+        const { email, role } = decoded;
+
+        // Find user by email
         const user = await UserModel.findOne({ email });
         if (!user) {
-            throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
+            return next(new AppError(httpStatus.UNAUTHORIZED, "You are not authorized"));
         }
-        if (requiredUserRole && !requiredUserRole.includes(role)) {
-            throw new AppError(
-                httpStatus.FORBIDDEN,
-                "You have no access to this route",
-            );
+
+        // Check role authorization
+        if (requiredUserRole.length > 0 && !requiredUserRole.includes(role)) {
+            return next(new AppError(httpStatus.FORBIDDEN, "You have no access to this route"));
         }
-        req.user = decoded as JwtPayload;
+
+        // Attach decoded user to request
+        req.user = decoded;
+
         next();
     });
 };

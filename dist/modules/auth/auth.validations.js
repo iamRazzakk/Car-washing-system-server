@@ -11,13 +11,17 @@ const userLoginValidationSchema = zod_1.z.object({
         email: zod_1.z.string({
             required_error: "Email is required",
             invalid_type_error: "Invalid email",
-        }),
+        }).email("Invalid email format"),
         password: passwordValidationSchema,
     }),
 });
 const userChangePasswordValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
-        password: passwordValidationSchema,
+        email: zod_1.z.string({
+            required_error: "Email is required",
+            invalid_type_error: "Invalid email",
+        }).email("Invalid email format"),
+        oldPassword: passwordValidationSchema,
         newPassword: passwordValidationSchema,
     }),
 });

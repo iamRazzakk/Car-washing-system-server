@@ -25,18 +25,39 @@ const AuthLoginController = (req, res) => __awaiter(void 0, void 0, void 0, func
             success: true,
             message: "User login successfully",
             token: result.token,
-            data: result
+            data: result.user,
         });
     }
     catch (error) {
         (0, sendResponse_1.default)(res, {
             statusCode: http_status_1.default.UNAUTHORIZED,
             success: false,
-            message: "Faild to login user",
-            data: error
+            message: "Failed to login user",
+            data: error,
+        });
+    }
+});
+const authPasswordChange = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, newPassword, oldPassword } = req.body;
+        const result = yield auth_service_1.AuthService.passwordChangeIntoDB({ email, oldPassword, newPassword });
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            message: "Password changed successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.BAD_REQUEST,
+            success: false,
+            message: "Failed to change password",
+            data: error,
         });
     }
 });
 exports.AuthContoller = {
-    AuthLoginController
+    AuthLoginController,
+    authPasswordChange
 };

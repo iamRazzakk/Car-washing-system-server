@@ -20,16 +20,38 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const LoginUser = (loginData) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = loginData;
     const user = yield singUser_model_1.UserModel.findOne({ email }).select("+password");
-    // if don't match password or email
-    if (!user)
+    if (!user) {
         throw new Error("Invalid email or password");
-    // verify password
+    }
     const isMatch = yield bcrypt_1.default.compare(password, user.password);
-    if (!isMatch)
+    if (!isMatch) {
         throw new Error("Invalid email or password");
+    }
     const token = jsonwebtoken_1.default.sign({ _id: user._id, email: user.email, role: user.role }, config_1.default.JWT_SECRET, { expiresIn: config_1.default.JWT_E_IN });
     return { user, token };
 });
+const passwordChangeIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, newPassword, oldPassword } = payload;
+    const user = yield singUser_model_1.UserModel.findOneAndUpdate({ email }).select("+password");
+    if (!user) {
+        throw new Error("User does not exist");
+    }
+    const isMatch = yield bcrypt_1.default.compare(oldPassword, user.password);
+    if (!isMatch) {
+        throw new Error("Old password is incorrect");
+    }
+    const hashedNewPassword = yield bcrypt_1.default.hash(newPassword, 12);
+    user.password = hashedNewPassword;
+    const updatedUser = yield user.save();
+    if (!updatedUser) {
+        throw new Error("Failed to change password");
+    }
+    return {
+        success: true,
+        message: "Password changed successfully",
+    };
+});
 exports.AuthService = {
-    LoginUser
+    LoginUser,
+    passwordChangeIntoDB
 };

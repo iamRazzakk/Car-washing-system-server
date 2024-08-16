@@ -12,25 +12,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userController = void 0;
-const singUser_model_1 = require("./singUser.model");
+exports.carSlotController = void 0;
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
-const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
-const AppError_1 = __importDefault(require("../../error/AppError"));
-const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userData = req.body;
-    const existingUser = yield singUser_model_1.UserModel.findOne({ email: userData.email });
-    if (existingUser) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "A user with this email already exists.");
-    }
-    // Create the user
-    const result = yield singUser_model_1.UserModel.create(userData);
+const carSlot_service_1 = require("./carSlot.service");
+// create car booking slot controller 
+const createSingleSlot = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = req.body;
+    const newService = yield carSlot_service_1.carServiceSlot.createSlotIntoDB(result);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: "Service created successfully",
+        data: newService,
+    });
+}));
+// get all car booking slot controller
+const getAllAvailableCarBookingSlot = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield carSlot_service_1.carServiceSlot.getAllAvailableSlotFromDB();
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "User registered successfully",
+        message: "Available slots retrieved successfully",
         data: result,
     });
 }));
-exports.userController = { createUser };
+exports.carSlotController = {
+    createSingleSlot,
+    getAllAvailableCarBookingSlot
+};
