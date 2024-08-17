@@ -13,13 +13,14 @@ const bookingService = new Schema<TBookService>({
         required: [true, "Service id is required"],
         ref: "CarService"
     },
-    slot: {
+    slotId: {
         type: Schema.Types.ObjectId,
         required: [true, "slot id is required"],
         ref: "carBookingSlot"
 
     },
     vehicleType: {
+        type: String,
         enum: {
             values: vehicleTypeArray,
             message: "Vehicle type must be one of: {VALUE}",
@@ -42,6 +43,8 @@ const bookingService = new Schema<TBookService>({
         type: String,
         required: [true, "Registration plate number is required"]
     }
+}, {
+    timestamps: true
 });
 
 export const BookServiceModel = model<TBookService>('bookingService', bookingService);

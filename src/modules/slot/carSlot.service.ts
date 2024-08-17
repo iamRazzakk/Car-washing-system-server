@@ -8,7 +8,7 @@ import { carSlotBookingSlot } from "./carSlot.model";
 
 const createSlotIntoDB = async (payload: TServiceSchedule) => {
     const isServiceExist = await CarServiceModel.findById(payload.service)
-    console.log("Service exists:", isServiceExist);
+    // console.log("Service exists:", isServiceExist);
     if (!isServiceExist) {
         throw new AppError(httpStatus.NOT_FOUND, "Service does not exist");
     }
