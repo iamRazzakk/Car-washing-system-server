@@ -5,7 +5,7 @@ import { vehicleTypeArray } from "./bookService.constance";
 const bookingService = new Schema<TBookService>({
     customer: {
         type: Schema.Types.ObjectId,
-        required: [true, "User id is required"],
+        // required: [true, "User id is required"],
         ref: "user",
     },
     serviceId: {

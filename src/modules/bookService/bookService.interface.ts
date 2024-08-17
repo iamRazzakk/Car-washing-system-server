@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 
+
 type vehicleTypes = "car"
     | "truck"
     | "SUV"

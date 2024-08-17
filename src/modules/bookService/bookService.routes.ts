@@ -5,5 +5,6 @@ import { CarBookingValidation } from "./bookService.validation";
 import auth from "../../middleware/auth";
 
 const router = Router()
-router.post('/', auth("user"), ValidationRequest(CarBookingValidation.createCarServiceBookingValidationSchema), bookServiceController.createBookServiceSlote)
+router.post('/', auth("user"), bookServiceController.createBookServiceSlote)
 export const bookServiceRouter = router
+// ValidationRequest(CarBookingValidation.createCarServiceBookingValidationSchema)

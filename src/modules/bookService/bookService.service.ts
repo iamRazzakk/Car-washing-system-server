@@ -1,80 +1,77 @@
 import mongoose from "mongoose";
-import { TBookService } from "./bookService.interface"
-import { UserModel } from "../user/singUser.model";
+import { TBookService } from "./bookService.interface";
 import AppError from "../../error/AppError";
 import httpStatus from "http-status";
+import { UserModel } from "../user/singUser.model";
 import { CarServiceModel } from "../service/carServiceModel";
 import { carSlotBookingSlot } from "../slot/carSlot.model";
 import { BookServiceModel } from "./bookService.model";
 
-
-const createSloteBookServiceIntoDB = async (payload: TBookService, email: string) => {
+const createSloteBookServiceIntoDB = async (payload: TBookService, customer: Record<string, unknown>) => {
     // Start a session for the transaction
     const session = await mongoose.startSession();
     session.startTransaction();
+
     try {
-        const customer = await UserModel.findOne({ email })
-        if (!customer) {
-            // if customer is not found than throw this error
+        // Assign the customer ID to the payload
+        payload.customer = customer._id as unknown as mongoose.Types.ObjectId;
+
+        // Validate if the customer exists
+        const customerExists = await UserModel.findById(customer._id).session(session);
+        if (!customerExists) {
             throw new AppError(httpStatus.NOT_FOUND, "Customer not found");
         }
-        const isCarServiceExist = await CarServiceModel.findById(
-            payload.serviceId,
-        )
-        console.log("is car service exist", isCarServiceExist)
+
+        // Validate if the car service exists
+        const isCarServiceExist = await CarServiceModel.findById(payload.serviceId).session(session);
         if (!isCarServiceExist) {
-            // If the service is not found, throw an error
-            throw new AppError(httpStatus.NOT_FOUND, "Service is not found");
+            throw new AppError(httpStatus.NOT_FOUND, "Service not found");
         }
-        const isCarBookingSlotExist = await carSlotBookingSlot.findById(payload.slotId)
+
+        // Validate if the booking slot exists
+        const isCarBookingSlotExist = await carSlotBookingSlot.findById(payload.slotId).session(session);
         if (!isCarBookingSlotExist) {
-            throw new AppError(httpStatus.NOT_FOUND, "Slot is not found");
+            throw new AppError(httpStatus.NOT_FOUND, "Slot not found");
         }
+
+        // Check if the slot is available for booking
         if (isCarBookingSlotExist.isBooked === "available") {
             await carSlotBookingSlot.findByIdAndUpdate(
                 payload.slotId,
                 { isBooked: "booked" },
-                { new: true, runValidators: true, session },
-            )
+                { new: true, runValidators: true, session }
+            );
         } else {
             throw new AppError(
                 httpStatus.BAD_REQUEST,
-                `Slot is already ${isCarBookingSlotExist.isBooked}`,
+                `Slot is already ${isCarBookingSlotExist.isBooked}`
             );
         }
-        const result = await BookServiceModel.create(
-            [
-                {
-                    customer: customer._id,
-                    service: payload.serviceId,
-                    slot: payload.slotId,
-                    vehicleType: payload.vehicleType,
-                    vehicleBrand: payload.vehicleBrand,
-                    vehicleModel: payload.vehicleModel,
-                    manufacturingYear: payload.manufacturingYear,
-                    registrationPlate: payload.registrationPlate,
-                },
-            ],
-            {
-                session,
-            },
-        )
-        const populateMyResult = await CarServiceModel.findById(result[0]._id).populate("customer")
-            .populate("CarService")
-            .populate("carBookingSlot")
-            .session(session);
+
+        // Create the booking service record
+        const result = await BookServiceModel.create([payload], { session });
+
+        // Populate the result with the necessary references
+        const populatedResult = await BookServiceModel.findById(result[0]._id)
+            .populate("customer")
+            .populate("serviceId")
+            .populate("slotId")
+            .session(session)
+            .exec();
+
+        // Commit the transaction
         await session.commitTransaction();
         session.endSession();
 
-        return populateMyResult;
+        return populatedResult;
     } catch (error) {
+        // Abort the transaction if there is an error
         await session.abortTransaction();
         session.endSession();
         throw error;
     }
-    // const result = await BookServiceModel.create(payload)
-    // return result
-}
+};
+
 export const bookServiceSloteService = {
     createSloteBookServiceIntoDB
-}
+};

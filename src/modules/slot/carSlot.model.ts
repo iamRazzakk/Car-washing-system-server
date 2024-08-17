@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 import { TServiceSchedule } from "./carSlot.interface";
 
-const CarServiceSchema: Schema<TServiceSchedule> = new Schema({
+const CarSlotSchema: Schema<TServiceSchedule> = new Schema({
     service: {
         type: Schema.Types.ObjectId,
         ref: "CarService",
@@ -29,4 +29,4 @@ const CarServiceSchema: Schema<TServiceSchedule> = new Schema({
     }
 
 }, { timestamps: true });
-export const carSlotBookingSlot = model<TServiceSchedule>('carBookingSlot', CarServiceSchema);
+export const carSlotBookingSlot = model<TServiceSchedule>('carBookingSlot', CarSlotSchema);

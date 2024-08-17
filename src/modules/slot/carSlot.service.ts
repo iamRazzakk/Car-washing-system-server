@@ -1,10 +1,10 @@
 
 import httpStatus from "http-status";
 import AppError from "../../error/AppError";
-import { CarServiceModel } from "../service/carServiceModel";
 import { TServiceSchedule } from "./carSlot.interface";
 import { GenerateTimeSlots } from "./generateTime.utils";
 import { carSlotBookingSlot } from "./carSlot.model";
+import { CarServiceModel } from "../service/carServiceModel";
 
 const createSlotIntoDB = async (payload: TServiceSchedule) => {
     const isServiceExist = await CarServiceModel.findById(payload.service)

@@ -4,17 +4,19 @@ import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { bookServiceSloteService } from "./bookService.service";
 const createBookServiceSlote = catchAsync(async (req: Request, res: Response) => {
+    console.log("User details", req.user)
     if (!req.user) {
         return res.status(httpStatus.UNAUTHORIZED).json({
             success: false,
             message: 'User is not authenticated',
         });
     }
-    const { email } = req.user;
+    // const { _id } = req.user;
     const result = await bookServiceSloteService.createSloteBookServiceIntoDB(
         req.body,
-        email,
+        req.user
     );
+    // console.log("This is my result", result)
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
