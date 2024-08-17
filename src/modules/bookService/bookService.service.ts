@@ -5,6 +5,7 @@ import AppError from "../../error/AppError";
 import httpStatus from "http-status";
 import { CarServiceModel } from "../service/carServiceModel";
 import { carSlotBookingSlot } from "../slot/carSlot.model";
+import { BookServiceModel } from "./bookService.model";
 
 
 const createSloteBookServiceIntoDB = async (payload: TBookService, email: string) => {
@@ -20,6 +21,7 @@ const createSloteBookServiceIntoDB = async (payload: TBookService, email: string
         const isCarServiceExist = await CarServiceModel.findById(
             payload.serviceId,
         )
+        console.log("is car service exist", isCarServiceExist)
         if (!isCarServiceExist) {
             // If the service is not found, throw an error
             throw new AppError(httpStatus.NOT_FOUND, "Service is not found");
@@ -40,7 +42,7 @@ const createSloteBookServiceIntoDB = async (payload: TBookService, email: string
                 `Slot is already ${isCarBookingSlotExist.isBooked}`,
             );
         }
-        const result = await CarServiceModel.create(
+        const result = await BookServiceModel.create(
             [
                 {
                     customer: customer._id,

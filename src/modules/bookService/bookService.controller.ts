@@ -2,7 +2,7 @@ import catchAsync from "../../utils/catchAsync";
 import { Request, Response } from "express";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
-import { carServiceServices } from "../service/carServiceService";
+import { bookServiceSloteService } from "./bookService.service";
 const createBookServiceSlote = catchAsync(async (req: Request, res: Response) => {
     if (!req.user) {
         return res.status(httpStatus.UNAUTHORIZED).json({
@@ -11,7 +11,7 @@ const createBookServiceSlote = catchAsync(async (req: Request, res: Response) =>
         });
     }
     const { email } = req.user;
-    const result = await carServiceServices.createCarServiceIntoDB(
+    const result = await bookServiceSloteService.createSloteBookServiceIntoDB(
         req.body,
         email,
     );
