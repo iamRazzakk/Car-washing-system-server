@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import { TSingUpUser } from "./singUser.interface";
+
 const userSchema = new Schema<TSingUpUser>({
     name: {
         type: String,
@@ -31,8 +32,8 @@ userSchema.pre("save", async function (next) {
             user.password = hashedPassword;
         }
         next();
-    } catch (error: any) {
-        next(error);
+    } catch (error) {
+        next(error as Error);
     }
 });
 

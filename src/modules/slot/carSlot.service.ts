@@ -24,8 +24,9 @@ const createSlotIntoDB = async (payload: TServiceSchedule) => {
         const result = await carSlotBookingSlot.insertMany(slots);
         // console.log("Inserted slots:", result);
         return result;
-    } catch (error: any) {
-        throw new AppError(httpStatus.BAD_REQUEST, error.message);
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "An error occurred while creating slots";
+        throw new AppError(httpStatus.BAD_REQUEST, message);
     }
 
 }

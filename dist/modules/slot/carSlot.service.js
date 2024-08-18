@@ -15,12 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.carServiceSlot = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../error/AppError"));
-const carServiceModel_1 = require("../service/carServiceModel");
 const generateTime_utils_1 = require("./generateTime.utils");
 const carSlot_model_1 = require("./carSlot.model");
+const carServiceModel_1 = require("../service/carServiceModel");
 const createSlotIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const isServiceExist = yield carServiceModel_1.CarServiceModel.findById(payload.service);
-    console.log("Service exists:", isServiceExist);
+    // console.log("Service exists:", isServiceExist);
     if (!isServiceExist) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Service does not exist");
     }
@@ -38,7 +38,8 @@ const createSlotIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
         return result;
     }
     catch (error) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, error.message);
+        const message = error instanceof Error ? error.message : "An error occurred while creating slots";
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, message);
     }
 });
 // get all avaiable slot from db

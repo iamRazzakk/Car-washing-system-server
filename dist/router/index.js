@@ -6,6 +6,7 @@ const singUser_routes_1 = require("../modules/user/singUser.routes");
 const auth_routes_1 = require("../modules/auth/auth.routes");
 const carService_routes_1 = require("../modules/service/carService.routes");
 const carSlote_routes_1 = require("../modules/slot/carSlote.routes");
+const bookService_routes_1 = require("../modules/bookService/bookService.routes");
 const router = (0, express_1.Router)();
 const appRouterModel = [
     {
@@ -23,6 +24,10 @@ const appRouterModel = [
     {
         path: '/slots/availability',
         routerFile: carSlote_routes_1.carSloteRouter
+    },
+    {
+        path: '/',
+        routerFile: bookService_routes_1.bookServiceRouter
     },
     {
         path: "/auth",

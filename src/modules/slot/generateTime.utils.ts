@@ -7,7 +7,8 @@ const generateTimeSlots = async (
     payload: TServiceSchedule,
     duration: number,
 ) => {
-    const slots = []; // Initialize an empty array for store generalSlot
+    // Initialize an empty array for store generalSlot
+    const slots = [];
 
     //  convert time in "HH:MM" format to minutes.
     const convertToMinutes = (time: string) => {

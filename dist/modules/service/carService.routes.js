@@ -13,9 +13,9 @@ const router = (0, express_1.Router)();
 // create service route
 router.post('/', (0, auth_1.default)("admin"), (0, validationRequest_1.ValidationRequest)(carServiceValidation_1.CarServiceValidation.createCarServiceValidationSchema), carService_controller_1.carServiceController.createService);
 // get service from database useing id route
-router.get('/:id', (0, auth_1.default)("admin"), carService_controller_1.carServiceController.getServiceById);
+router.get('/:id', carService_controller_1.carServiceController.getServiceById);
 // get all service from database route
-router.get("/", (0, auth_1.default)("admin"), carService_controller_1.carServiceController.getAllCarService);
+router.get("/", carService_controller_1.carServiceController.getAllCarService);
 // update single car service from database route
 router.put('/:id', (0, auth_1.default)("admin"), (0, validationRequest_1.ValidationRequest)(carServiceValidation_1.CarServiceValidation.updateCarServiceValidationSchema), carService_controller_1.carServiceController.updateSingleCarService);
 // delete data from database

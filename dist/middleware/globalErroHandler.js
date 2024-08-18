@@ -67,7 +67,7 @@ const globalErrorHandler = (err, req, res) => {
         success: false,
         message,
         errorMessages,
-        stack: config_1.default.NODE_ENV === "development" ? err.stack : null,
+        stack: config_1.default.NODE_DEV === "development" ? err.stack : null,
     });
 };
 exports.default = globalErrorHandler;
