@@ -4,7 +4,9 @@ import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { bookServiceSloteService } from "./bookService.service";
 import mongoose from "mongoose";
-const createBookServiceSlote = catchAsync(async (req: Request, res: Response) => {
+import { CustomRequest } from "./CustomRequest";
+import { AnotherCustomRequest } from "./bookService.constance";
+const createBookServiceSlote = catchAsync(async (req: CustomRequest, res: Response) => {
     // console.log("User details", req.user)
     if (!req.user) {
         return res.status(httpStatus.UNAUTHORIZED).json({
@@ -39,7 +41,7 @@ const getAllBookService = catchAsync(async (req: Request, res: Response) => {
 
 
 // get all book service for user authorize
-const getUserBookingController = catchAsync(async (req: Request, res: Response) => {
+const getUserBookingController = catchAsync(async (req: AnotherCustomRequest, res: Response) => {
     // console.log("Thsi my user", req.user)
     const userId = req?.user?._id as mongoose.Types.ObjectId;
     const result = await bookServiceSloteService.getAllMyService(userId);

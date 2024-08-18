@@ -46,7 +46,6 @@ const auth = (...requiredUserRole: TUserRole[]) => {
 
             next();
         } catch (error) {
-            console.log(error)
             return next(new AppError(httpStatus.UNAUTHORIZED, "Invalid token"));
         }
     });

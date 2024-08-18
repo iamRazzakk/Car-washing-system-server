@@ -10,9 +10,9 @@ const router = Router()
 router.post('/', auth("admin"), ValidationRequest(CarServiceValidation.createCarServiceValidationSchema), carServiceController.createService)
 
 // get service from database useing id route
-router.get('/:id', auth("admin"), carServiceController.getServiceById)
+router.get('/:id', carServiceController.getServiceById)
 // get all service from database route
-router.get("/", auth("admin"), carServiceController.getAllCarService)
+router.get("/", carServiceController.getAllCarService)
 // update single car service from database route
 router.put('/:id', auth("admin"), ValidationRequest(CarServiceValidation.updateCarServiceValidationSchema), carServiceController.updateSingleCarService)
 // delete data from database
