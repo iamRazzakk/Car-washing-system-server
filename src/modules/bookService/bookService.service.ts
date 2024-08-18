@@ -91,7 +91,7 @@ const getAllMyService = async (userId: mongoose.Types.ObjectId) => {
     ];
     const result = await BookServiceModel.find(query)
         .populate(populateOptions);
-
+    console.log("Find all booking for user", result)
     if (!result.length) {
         throw new AppError(httpStatus.NOT_FOUND, "No data found");
     }

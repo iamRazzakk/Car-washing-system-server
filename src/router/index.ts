@@ -23,16 +23,16 @@ const appRouterModel = [
         path: '/slots/availability',
         routerFile: carSloteRouter
     },
+    // {
+    //     path: '/bookings',
+    //     routerFile: bookServiceRouter
+    // },
+    // {
+    //     path: '/bookings',
+    //     routerFile: bookServiceRouter
+    // },
     {
-        path: '/bookings',
-        routerFile: bookServiceRouter
-    },
-    {
-        path: '/bookings',
-        routerFile: bookServiceRouter
-    },
-    {
-        path: '/my-bookings',
+        path: '/',
         routerFile: bookServiceRouter
     },
     {

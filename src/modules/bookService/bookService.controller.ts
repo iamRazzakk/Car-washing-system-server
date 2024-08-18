@@ -40,8 +40,11 @@ const getAllBookService = catchAsync(async (req: Request, res: Response) => {
 
 // get all book service for user authorize
 const getUserBookingController = catchAsync(async (req: Request, res: Response) => {
-    const userId = req.user._id as mongoose.Types.ObjectId;
+    // console.log("Thsi my user", req.user)
+    const userId = req?.user?._id as mongoose.Types.ObjectId;
     const result = await bookServiceSloteService.getAllMyService(userId);
+
+    // console.log("Find all booking for user", result)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
