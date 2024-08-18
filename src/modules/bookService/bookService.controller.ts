@@ -4,7 +4,7 @@ import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { bookServiceSloteService } from "./bookService.service";
 const createBookServiceSlote = catchAsync(async (req: Request, res: Response) => {
-    console.log("User details", req.user)
+    // console.log("User details", req.user)
     if (!req.user) {
         return res.status(httpStatus.UNAUTHORIZED).json({
             success: false,
