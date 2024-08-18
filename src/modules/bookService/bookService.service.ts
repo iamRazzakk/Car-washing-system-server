@@ -71,7 +71,35 @@ const createSloteBookServiceIntoDB = async (payload: TBookService, customer: Rec
         throw error;
     }
 };
+// get all book service Service admin authrize
+const getAllBookServiceIntoDB = async () => {
+    const result = await BookServiceModel.find().populate("customer")
+        .populate("serviceId")
+        .populate("slotId")
+    if (result.length === 0) {
+        throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
+    }
+    return result;
+}
+// get my booking user can authorize
+const getAllMyService = async (userId: mongoose.Types.ObjectId) => {
+    const query = { customer: userId };
+    const populateOptions = [
+        { path: "customer" },
+        { path: "serviceId" },
+        { path: "slotId" },
+    ];
+    const result = await BookServiceModel.find(query)
+        .populate(populateOptions);
+
+    if (!result.length) {
+        throw new AppError(httpStatus.NOT_FOUND, "No data found");
+    }
+    return result;
+}
 
 export const bookServiceSloteService = {
-    createSloteBookServiceIntoDB
+    createSloteBookServiceIntoDB,
+    getAllBookServiceIntoDB,
+    getAllMyService
 };

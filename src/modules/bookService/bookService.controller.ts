@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { bookServiceSloteService } from "./bookService.service";
+import mongoose from "mongoose";
 const createBookServiceSlote = catchAsync(async (req: Request, res: Response) => {
     // console.log("User details", req.user)
     if (!req.user) {
@@ -25,6 +26,31 @@ const createBookServiceSlote = catchAsync(async (req: Request, res: Response) =>
         data: result,
     });
 })
+// get all book service controller only authorize for admin
+const getAllBookService = catchAsync(async (req: Request, res: Response) => {
+    const result = await bookServiceSloteService.getAllBookServiceIntoDB();
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "All bookings retrieved successfully",
+        data: result,
+    });
+})
+
+
+// get all book service for user authorize
+const getUserBookingController = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user._id as mongoose.Types.ObjectId;
+    const result = await bookServiceSloteService.getAllMyService(userId);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "User bookings retrieved successfully",
+        data: result,
+    });
+})
 export const bookServiceController = {
-    createBookServiceSlote
+    createBookServiceSlote,
+    getAllBookService,
+    getUserBookingController
 }

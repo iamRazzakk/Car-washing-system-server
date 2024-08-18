@@ -28,6 +28,14 @@ const appRouterModel = [
         routerFile: bookServiceRouter
     },
     {
+        path: '/bookings',
+        routerFile: bookServiceRouter
+    },
+    {
+        path: '/my-bookings',
+        routerFile: bookServiceRouter
+    },
+    {
         path: "/auth",
         routerFile: logingRouter
     }
