@@ -82,3 +82,11 @@ This command runs the application with ts-node-dev, which automatically restarts
 ```bash
 npm run start:dev
 ```
+
+### Lint the Code
+
+To check the code for potential errors and style issues, run:
+
+```bash
+npm run lint
+```

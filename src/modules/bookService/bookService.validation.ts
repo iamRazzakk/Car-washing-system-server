@@ -19,7 +19,7 @@ const createCarServiceBookingValidationSchema = z.object({
                 invalid_type_error: "Slot ID must be a string",
             })
             .trim(),
-        vehicleType: z.enum([...(vehicleTypeArray as [string, ...string[]])], {
+        vehicleType: z.enum(vehicleTypeArray as unknown as [string, ...string[]], {
             required_error: "Vehicle Type is required",
             invalid_type_error: "Invalid Vehicle Type",
         }),

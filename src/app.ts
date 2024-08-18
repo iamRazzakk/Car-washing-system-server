@@ -12,7 +12,10 @@ app.use(cors());
 app.use('/api', Routers)
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Hello World!');
+    // res.send('Hello World!');
+    res.json(
+        "Server is running"
+    )
 });
 // for not found route
 app.use("*", NotFound)

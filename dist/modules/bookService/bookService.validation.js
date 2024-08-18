@@ -20,7 +20,7 @@ const createCarServiceBookingValidationSchema = zod_1.z.object({
             invalid_type_error: "Slot ID must be a string",
         })
             .trim(),
-        vehicleType: zod_1.z.enum([...bookService_constance_1.vehicleTypeArray], {
+        vehicleType: zod_1.z.enum(bookService_constance_1.vehicleTypeArray, {
             required_error: "Vehicle Type is required",
             invalid_type_error: "Invalid Vehicle Type",
         }),
