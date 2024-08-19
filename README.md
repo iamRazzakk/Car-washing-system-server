@@ -17,7 +17,7 @@ The Car Wash Booking System is designed to streamline the process of booking car
 
 ## Live URL
 
-ou can access the live version of the application [here](https://car-wash-booking-service.vercel.app).
+ou can access the live version of the application [here](https://car-washing-system-server-rakib.vercel.app/).
 
 ## Models
 
