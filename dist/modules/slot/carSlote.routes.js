@@ -11,6 +11,6 @@ const carSlot_controller_1 = require("./carSlot.controller");
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const router = (0, express_1.Router)();
 // create service route
-router.post('/', (0, auth_1.default)("admin"), (0, validationRequest_1.ValidationRequest)(carSlot_validation_1.carSloteValidationSchema.serviceScheduleSchema), carSlot_controller_1.carSlotController.createSingleSlot);
+router.post('/', (0, auth_1.default)("ADMIN"), (0, validationRequest_1.ValidationRequest)(carSlot_validation_1.carSloteValidationSchema.serviceScheduleSchema), carSlot_controller_1.carSlotController.createSingleSlot);
 router.get('/', carSlot_controller_1.carSlotController.getAllAvailableCarBookingSlot);
 exports.carSloteRouter = router;

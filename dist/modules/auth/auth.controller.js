@@ -24,7 +24,8 @@ const AuthLoginController = (req, res) => __awaiter(void 0, void 0, void 0, func
             statusCode: http_status_1.default.OK,
             success: true,
             message: "User login successfully",
-            token: result.token,
+            accessToke: result.accessToken,
+            refreshToke: result.refreshToken,
             data: result.user,
         });
     }
@@ -40,7 +41,11 @@ const AuthLoginController = (req, res) => __awaiter(void 0, void 0, void 0, func
 const authPasswordChange = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, newPassword, oldPassword } = req.body;
-        const result = yield auth_service_1.AuthService.passwordChangeIntoDB({ email, oldPassword, newPassword });
+        const result = yield auth_service_1.AuthService.passwordChangeIntoDB({
+            email,
+            oldPassword,
+            newPassword,
+        });
         (0, sendResponse_1.default)(res, {
             statusCode: http_status_1.default.OK,
             success: true,
@@ -59,5 +64,5 @@ const authPasswordChange = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.AuthContoller = {
     AuthLoginController,
-    authPasswordChange
+    authPasswordChange,
 };

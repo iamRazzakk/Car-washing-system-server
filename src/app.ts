@@ -7,7 +7,9 @@ import globalErrorHandler from "./middleware/globalErroHandler";
 const app: Application = express()
 // parser 
 app.use(express.json())
-app.use(cors());
+app.use(cors({
+    origin:"http://localhost:5173"
+}));
 // this is the main route for this application
 app.use('/api', Routers)
 

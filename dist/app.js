@@ -11,11 +11,14 @@ const globalErroHandler_1 = __importDefault(require("./middleware/globalErroHand
 const app = (0, express_1.default)();
 // parser 
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: "http://localhost:5173"
+}));
 // this is the main route for this application
 app.use('/api', router_1.Routers);
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    // res.send('Hello World!');
+    res.json("Server is running");
 });
 // for not found route
 app.use("*", notFound_1.NotFound);

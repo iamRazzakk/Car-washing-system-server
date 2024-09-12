@@ -1,5 +1,5 @@
 import { z } from "zod";
-export type UserRole = "admin" | "user";
+export type UserRole = "ADMIN" | "USER";
 
 const passwordSchema = z.string({
     required_error: "Password is required",
@@ -28,10 +28,10 @@ const createSignUpValidationSchema = z.object({
             required_error: "Role is required",
             invalid_type_error: "Role is must be a string",
         }),
-        address: z.string({
-            required_error: "Address is required",
-            invalid_type_error: "Address is must be a string",
-        }),
+        // address: z.string({
+        //     required_error: "Address is required",
+        //     invalid_type_error: "Address is must be a string",
+        // }),
     }),
 });
 export const singUpValidationSchema = {

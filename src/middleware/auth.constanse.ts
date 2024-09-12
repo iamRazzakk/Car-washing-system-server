@@ -1,7 +1,7 @@
 export type TUserTokenPayload = {
     _id: string;
     email: string;
-    role: 'user' | 'admin';
+    role: 'USER' | 'ADMIN';
     iat: number;
     exp: number;
 };

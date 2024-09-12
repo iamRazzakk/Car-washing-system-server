@@ -11,10 +11,10 @@ const bookService_validation_1 = require("./bookService.validation");
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const router = (0, express_1.Router)();
 // post book service route
-router.post('/bookings', (0, auth_1.default)("user"), (0, validationRequest_1.ValidationRequest)(bookService_validation_1.CarBookingValidation.createCarServiceBookingValidationSchema), bookService_controller_1.bookServiceController.createBookServiceSlote);
+router.post('/bookings', (0, auth_1.default)("USER"), (0, validationRequest_1.ValidationRequest)(bookService_validation_1.CarBookingValidation.createCarServiceBookingValidationSchema), bookService_controller_1.bookServiceController.createBookServiceSlote);
 // get all service
-router.get('/bookings', (0, auth_1.default)("admin"), bookService_controller_1.bookServiceController.getAllBookService);
+router.get('/bookings', (0, auth_1.default)("ADMIN"), bookService_controller_1.bookServiceController.getAllBookService);
 // get my service as a user 
-router.get("/my-bookings", (0, auth_1.default)("user"), bookService_controller_1.bookServiceController.getUserBookingController);
+router.get("/my-bookings", (0, auth_1.default)("USER"), bookService_controller_1.bookServiceController.getUserBookingController);
 // export route
 exports.bookServiceRouter = router;

@@ -17,13 +17,18 @@ const LoginUser = async (loginData: TUserLogin) => {
         throw new Error("Invalid email or password");
     }
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
         { _id: user._id, email: user.email, role: user.role },
         config.JWT_SECRET as string,
         { expiresIn: config.JWT_E_IN as string }
     );
+    const refreshToken = jwt.sign(
+        { _id: user._id, email: user.email, role: user.role },
+        config.REFRESH_JWT_SECRET as string,
+        { expiresIn: config.JWT_R_IN as string }
+    );
 
-    return { user, token };
+    return { user,  accessToken, refreshToken };
 };
 
 

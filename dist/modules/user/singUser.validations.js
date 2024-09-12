@@ -25,10 +25,10 @@ const createSignUpValidationSchema = zod_1.z.object({
             required_error: "Role is required",
             invalid_type_error: "Role is must be a string",
         }),
-        address: zod_1.z.string({
-            required_error: "Address is required",
-            invalid_type_error: "Address is must be a string",
-        }),
+        // address: z.string({
+        //     required_error: "Address is required",
+        //     invalid_type_error: "Address is must be a string",
+        // }),
     }),
 });
 exports.singUpValidationSchema = {

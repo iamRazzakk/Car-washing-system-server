@@ -27,8 +27,9 @@ const LoginUser = (loginData) => __awaiter(void 0, void 0, void 0, function* () 
     if (!isMatch) {
         throw new Error("Invalid email or password");
     }
-    const token = jsonwebtoken_1.default.sign({ _id: user._id, email: user.email, role: user.role }, config_1.default.JWT_SECRET, { expiresIn: config_1.default.JWT_E_IN });
-    return { user, token };
+    const accessToken = jsonwebtoken_1.default.sign({ _id: user._id, email: user.email, role: user.role }, config_1.default.JWT_SECRET, { expiresIn: config_1.default.JWT_E_IN });
+    const refreshToken = jsonwebtoken_1.default.sign({ _id: user._id, email: user.email, role: user.role }, config_1.default.REFRESH_JWT_SECRET, { expiresIn: config_1.default.JWT_R_IN });
+    return { user, accessToken, refreshToken };
 });
 const passwordChangeIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, newPassword, oldPassword } = payload;

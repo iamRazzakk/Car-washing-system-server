@@ -24,7 +24,7 @@ const userSchema = new mongoose_1.Schema({
     email: { type: String, required: [true, "Email is required"], unique: true, trim: true },
     password: { type: String, required: [true, "Passowrd is required"], select: false, trim: true },
     phone: { type: String, required: [true, "Phone number is required"], trim: true, unique: true },
-    role: { type: String, enum: ["admin", "user"], required: [true, "Role i s required"], trim: true },
+    role: { type: String, enum: ["ADMIN", "USER"], required: [true, "Role i s required"], trim: true },
     address: { type: String, required: true },
     passwordCreatedAt: {
         type: Date,

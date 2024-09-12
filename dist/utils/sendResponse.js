@@ -5,7 +5,8 @@ const sendResponse = (res, data) => {
         statusCode: data.statusCode,
         success: data.success,
         message: data.message,
-        token: data.token,
+        accessToke: data.accessToke,
+        refreshToke: data.refreshToke,
         data: data.data,
     });
 };

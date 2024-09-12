@@ -6,7 +6,7 @@ import auth from "../../middleware/auth"
 
 const router = Router()
 // create service route
-router.post('/', auth("admin"), ValidationRequest(carSloteValidationSchema.serviceScheduleSchema), carSlotController.createSingleSlot)
+router.post('/', auth("ADMIN"), ValidationRequest(carSloteValidationSchema.serviceScheduleSchema), carSlotController.createSingleSlot)
 router.get('/', carSlotController.getAllAvailableCarBookingSlot)
 
 export const carSloteRouter = router
