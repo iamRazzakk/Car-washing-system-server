@@ -1,6 +1,7 @@
 export type TUserLogin = {
     email: string,
-    password: string
+    password: string,
+    refreshToke?:string
 }
 export type TChangePassoword = {
     email: string;
