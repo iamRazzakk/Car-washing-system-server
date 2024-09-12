@@ -54,8 +54,29 @@ const authPasswordChange = async (req: Request, res: Response) => {
     });
   }
 };
+const refreshToken = async (req: Request, res: Response) => {
+  try {
+    const result = AuthService.RefreshTokenService(req.body);
+   
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Password changed successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendResponse(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: "Failed to change password",
+      data: error,
+    });
+  }
+};
+
 
 export const AuthContoller = {
   AuthLoginController,
   authPasswordChange,
+  refreshToken
 };
