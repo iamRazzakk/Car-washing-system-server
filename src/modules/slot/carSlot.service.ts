@@ -27,9 +27,9 @@ const createSlotIntoDB = async (payload: TServiceSchedule) => {
 
 // Service to get all available slots
 const getAllAvailableSlotFromDB = async () => {
-    const result = await carSlotBookingSlot.find({ isBooked: "available" }).populate("service");
+    const result = await carSlotBookingSlot.find({}).populate("service");
     if (result.length === 0) {
-        throw new AppError(httpStatus.NOT_FOUND, "No available slots found");
+        throw new AppError(httpStatus.NOT_FOUND, "No slots found");
     }
     return result;
 };

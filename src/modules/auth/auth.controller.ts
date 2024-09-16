@@ -3,6 +3,7 @@ import { AuthService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import config from "../../config";
+import { UserModel } from "../user/singUser.model";
 
 const AuthLoginController = async (req: Request, res: Response) => {
   try {
@@ -56,7 +57,7 @@ const authPasswordChange = async (req: Request, res: Response) => {
 };
 const refreshToken = async (req: Request, res: Response) => {
   try {
-    console.log(req.body); 
+    // console.log(req.body); 
 
     const result = await AuthService.RefreshTokenService(req.body.refreshToken);
 
@@ -76,11 +77,32 @@ const refreshToken = async (req: Request, res: Response) => {
   }
 };
 
+// get all user 
+const getUserList = async (req: Request, res: Response) => {
+  try {
+    const users = await UserModel.find();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Users fetched successfully",
+      data: users,
+    });
+  } catch (error) {
+    sendResponse(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: "Failed to fetch users",
+      data: error,
+    });
+  }
+};
+
 
 
 
 export const AuthContoller = {
   AuthLoginController,
   authPasswordChange,
-  refreshToken
+  refreshToken,
+  getUserList
 };
