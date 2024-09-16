@@ -58,9 +58,22 @@ const passwordChangeIntoDB = async (payload: TChangePassoword) => {
   };
 };
 
-const RefreshTokenService = async (payload) => {
-  console.log(payload);
+const RefreshTokenService = async (refreshToken: string) => {
+  try {
+    const payload = jwt.verify(refreshToken, config.REFRESH_JWT_SECRET as string);
+    const newAccessToken = jwt.sign(
+      { _id: payload._id, email: payload.email, role: payload.role },
+      config.JWT_SECRET as string,
+      { expiresIn: config.JWT_E_IN as string }
+    );
+    console.log("New Access token", newAccessToken);
+    
+    return { accessToken: newAccessToken };
+  } catch (error) {
+    throw new Error("Invalid or expired refresh token");
+  }
 };
+
 
 export const AuthService = {
   LoginUser,

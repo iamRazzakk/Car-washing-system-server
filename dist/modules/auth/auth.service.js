@@ -52,7 +52,19 @@ const passwordChangeIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
         message: "Password changed successfully",
     };
 });
+const RefreshTokenService = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const payload = jsonwebtoken_1.default.verify(refreshToken, config_1.default.REFRESH_JWT_SECRET);
+        const newAccessToken = jsonwebtoken_1.default.sign({ _id: payload._id, email: payload.email, role: payload.role }, config_1.default.JWT_SECRET, { expiresIn: config_1.default.JWT_E_IN });
+        console.log("New Access token", newAccessToken);
+        return { accessToken: newAccessToken };
+    }
+    catch (error) {
+        throw new Error("Invalid or expired refresh token");
+    }
+});
 exports.AuthService = {
     LoginUser,
-    passwordChangeIntoDB
+    passwordChangeIntoDB,
+    RefreshTokenService,
 };

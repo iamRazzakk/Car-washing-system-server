@@ -1,10 +1,10 @@
-export type TErrorMessages = {
+export type TErrorSources = {
     path: string | number;
     message: string;
-}[];
+  }[];
 
 export interface IErrorResponse {
     statusCode: number;
     message: string;
-    errorMessages: TErrorMessages;
+    errorSources: TErrorSources;
 }

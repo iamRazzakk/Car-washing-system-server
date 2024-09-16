@@ -56,23 +56,27 @@ const authPasswordChange = async (req: Request, res: Response) => {
 };
 const refreshToken = async (req: Request, res: Response) => {
   try {
-    const result = AuthService.RefreshTokenService(req.body);
-   
+    console.log(req.body); 
+
+    const result = await AuthService.RefreshTokenService(req.body.refreshToken);
+
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Password changed successfully",
-      data: result,
+      message: "Token refreshed successfully",
+      data: result.accessToken,
     });
   } catch (error) {
     sendResponse(res, {
       statusCode: httpStatus.BAD_REQUEST,
       success: false,
-      message: "Failed to change password",
+      message: "Failed to refresh token",
       data: error,
     });
   }
 };
+
+
 
 
 export const AuthContoller = {

@@ -11,3 +11,4 @@ router.post('/login', (0, validationRequest_1.ValidationRequest)(auth_validation
 // Password change route
 router.post('/change-password', (0, validationRequest_1.ValidationRequest)(auth_validations_1.AuthValidationSchema.userChangePasswordValidationSchema), auth_controller_1.AuthContoller.authPasswordChange);
 exports.logingRouter = router;
+router.post('/refresh-token', (0, validationRequest_1.ValidationRequest)(auth_validations_1.AuthValidationSchema.refreshTokenValidationSchema), auth_controller_1.AuthContoller.refreshToken);

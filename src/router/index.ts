@@ -24,6 +24,10 @@ const appRouterModel = [
         routerFile: carSloteRouter
     },
     {
+        path: '/services/slots',
+        routerFile: carSloteRouter
+    },
+    {
         path: '/',
         routerFile: bookServiceRouter
     },

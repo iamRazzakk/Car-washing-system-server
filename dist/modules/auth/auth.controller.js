@@ -68,7 +68,28 @@ const authPasswordChange = (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
     }
 });
+const refreshToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.body);
+        const result = yield auth_service_1.AuthService.RefreshTokenService(req.body.refreshToken);
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            message: "Token refreshed successfully",
+            data: result.accessToken,
+        });
+    }
+    catch (error) {
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.BAD_REQUEST,
+            success: false,
+            message: "Failed to refresh token",
+            data: error,
+        });
+    }
+});
 exports.AuthContoller = {
     AuthLoginController,
     authPasswordChange,
+    refreshToken
 };

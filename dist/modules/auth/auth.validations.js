@@ -29,9 +29,8 @@ const refreshTokenValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         refreshToken: zod_1.z.string({
             required_error: "Refresh token is required",
-            invalid_type_error: "Invalid refresh token",
-        }),
-    })
+        }).nonempty("Refresh token cannot be empty"),
+    }),
 });
 exports.AuthValidationSchema = {
     userLoginValidationSchema,

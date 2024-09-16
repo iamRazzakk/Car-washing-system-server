@@ -31,12 +31,12 @@ const userChangePasswordValidationSchema = z.object({
 
 const refreshTokenValidationSchema = z.object({
     body: z.object({
-        refreshToken: z.string({
-            required_error: "Refresh token is required",
-            invalid_type_error: "Invalid refresh token",
-        }),
-    })
-})
+      refreshToken: z.string({
+        required_error: "Refresh token is required",
+      }).nonempty("Refresh token cannot be empty"),
+    }),
+  });
+  
 
 export const AuthValidationSchema = {
     userLoginValidationSchema,

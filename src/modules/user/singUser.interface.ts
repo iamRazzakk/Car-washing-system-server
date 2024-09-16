@@ -6,8 +6,8 @@ export type TSingUpUser = {
     email: string,
     password: string,
     phone: string,
-    role: userRole,
-    address?: string,
+    role?: userRole,
+    address: string,
     passwordCreatedAt?: Date
     refreshToke?:string
 }

@@ -9,3 +9,5 @@ router.post('/login', ValidationRequest(AuthValidationSchema.userLoginValidation
 // Password change route
 router.post('/change-password', ValidationRequest(AuthValidationSchema.userChangePasswordValidationSchema), AuthContoller.authPasswordChange);
 export const logingRouter = router
+
+router.post('/refresh-token', ValidationRequest(AuthValidationSchema.refreshTokenValidationSchema), AuthContoller.refreshToken);
