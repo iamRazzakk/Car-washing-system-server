@@ -29,6 +29,15 @@ const userChangePasswordValidationSchema = z.object({
     }),
 });
 
+const editUserRoleSchema = z.object({
+    body: z.object({
+      role: z.enum(["USER", "ADMIN"], {
+        required_error: "Role is required",
+        invalid_type_error: "Invalid role type"
+      }),
+    }),
+  });
+
 const refreshTokenValidationSchema = z.object({
     body: z.object({
       refreshToken: z.string({
@@ -42,4 +51,5 @@ export const AuthValidationSchema = {
     userLoginValidationSchema,
     userChangePasswordValidationSchema,
     refreshTokenValidationSchema,
+    editUserRoleSchema
 }

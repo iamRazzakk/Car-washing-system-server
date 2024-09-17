@@ -34,6 +34,17 @@ const createSignUpValidationSchema = z.object({
         }),
     }),
 });
+
+const updateUserRoleValidationSchema = z.object({
+    body: z.object({
+        role: z.enum(["ADMIN", "USER"], {
+            required_error: "Role is required",
+            invalid_type_error: "Role must be one of 'ADMIN' or 'USER'",
+        }),
+    }),
+});
+
 export const singUpValidationSchema = {
-    createSignUpValidationSchema
+    createSignUpValidationSchema,
+    updateUserRoleValidationSchema
 }
