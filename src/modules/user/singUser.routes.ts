@@ -12,11 +12,7 @@ router.post(
 
 //get all user
 router.get("/users", auth("ADMIN"), userController.getUserList);
-
-// router.put(
-//   "/users/:userId",
-//   auth("ADMIN"),userController.editUserRole
-// );
+// update user role
 router.patch(
     '/users/:userId/role',ValidationRequest(singUpValidationSchema.updateUserRoleValidationSchema), 
     auth("ADMIN"),userController.editUserRole,
