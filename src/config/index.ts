@@ -20,5 +20,7 @@ export default {
     JWT_E_IN: process.env.JWT_EXPIRES_IN,
     JWT_R_IN: process.env.REFRESH_IN,
     NODE_DEV: process.env.NODE_DEV,
-    
+    STORE_ID:process.env.STORE_ID,
+    SIGNATURE_KEY:process.env.SIGNATURE_KEY,
+    PAYMENT_URL:process.env.PAYMENT_URL
 }
