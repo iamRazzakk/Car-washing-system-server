@@ -51,8 +51,18 @@ const updateSlotStatusInDB = async (id: string, status: "available" | "canceled"
     return slot;
 };
 
+const getSlotsByServiceIdFromDB = async (id: string) => {
+    // get data from database using id
+    const serviceData = await carSlotBookingSlot.findById(id)
+    if (!serviceData) {
+        throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
+    }
+    return serviceData
+}
+
 export const carServiceSlot = {
     createSlotIntoDB,
     getAllAvailableSlotFromDB,
     updateSlotStatusInDB, 
+    getSlotsByServiceIdFromDB
 };

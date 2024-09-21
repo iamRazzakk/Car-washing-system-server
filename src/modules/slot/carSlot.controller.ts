@@ -7,7 +7,7 @@ import { carServiceSlot } from "./carSlot.service";
 // Controller to create a single slot
 const createSingleSlot = catchAsync(async (req: Request, res: Response) => {
     const result = req.body;
-    const newService = await carServiceSlot.createSlotIntoDB(result); // Creating a slot in the database
+    const newService = await carServiceSlot.createSlotIntoDB(result); 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
         success: true,
@@ -18,7 +18,7 @@ const createSingleSlot = catchAsync(async (req: Request, res: Response) => {
 
 // Controller to get all available slots
 const getAllAvailableSlots = catchAsync(async (req: Request, res: Response) => {
-    const result = await carServiceSlot.getAllAvailableSlotFromDB(); // Fetching all available slots from the database
+    const result = await carServiceSlot.getAllAvailableSlotFromDB(); 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -49,9 +49,21 @@ const updateSlotStatus = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getSlotsByServiceId = catchAsync(async (req: Request, res: Response) => {
+    const { serviceId } = req.params; // Get serviceId from params
+    const result = await carServiceSlot.getSlotsByServiceIdFromDB(serviceId);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Slots retrieved successfully",
+        data: result,
+    });
+});
+
 
 export const carSlotController = {
     createSingleSlot,
     getAllAvailableSlots,
     updateSlotStatus,
+    getSlotsByServiceId
 };

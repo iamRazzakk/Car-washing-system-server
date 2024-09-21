@@ -43,52 +43,9 @@ const updateUserRole = async (userId: string, role: 'USER' | 'ADMIN') => {
         throw new AppError(500, 'Failed to update user role');
     }
 };
-const updateUserProfile = async (userId: string, profileData: Partial<TSingUpUser>) => {
-    const { name, phone, address, profilePic } = profileData;
-
-    const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        {
-            name,
-            phone,
-            address,
-            profilePic: profilePic || undefined,  // Update profilePic only if provided
-        },
-        { new: true }
-    );
-
-    if (!updatedUser) {
-        throw new Error("User not found");
-    }
-
-    return updatedUser;
-};
-const updatePassword = async (userId: string, oldPassword: string, newPassword: string) => {
-    const user = await User.findById(userId);
-    if (!user) {
-        throw new Error("User not found");
-    }
-
-    // Check if the old password matches
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-        throw new Error("Old password is incorrect");
-    }
-
-    // Hash the new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-    user.password = hashedPassword;
-    user.passwordCreatedAt = new Date();
-    await user.save();
-
-    return user;
-};
 
 export const UserService = {
     createUser,
     getAllUser,
-    updateUserRole,
-    updateUserProfile
+    updateUserRole
 }

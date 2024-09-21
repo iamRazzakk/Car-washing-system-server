@@ -22,6 +22,9 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+
+
+
 const editUserRole = catchAsync(async (req: Request, res: Response) => {
     const { userId } = req.params;
     const { role } = req.body;
@@ -55,41 +58,4 @@ const getUserList = async (req: Request, res: Response) => {
     }
   };
 
-
-
-  const updateProfile = async (req: Request, res: Response) => {
-    try {
-        const userId = req.user._id;  // Assume you extract userId from auth middleware
-        const { name, phone, address } = req.body;
-        const profilePic = req.file?.path;  // Assume using multer for file upload
-        
-        const updatedUser = await updateUserProfile(userId, { name, phone, address, profilePic });
-
-        res.status(200).json({
-            success: true,
-            message: "Profile updated successfully",
-            data: updatedUser
-        });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-};
-
-const changePassword = async (req: Request, res: Response) => {
-  try {
-      const userId = req.user._id; // Assume you extract userId from auth middleware
-      const { oldPassword, newPassword } = req.body;
-
-      const updatedUser = await updatePassword(userId, oldPassword, newPassword);
-
-      res.status(200).json({
-          success: true,
-          message: "Password updated successfully",
-          data: updatedUser
-      });
-  } catch (error) {
-      res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-export const userController = { createUser,editUserRole,getUserList,updateProfile, changePassword }
+export const userController = { createUser,editUserRole,getUserList }
