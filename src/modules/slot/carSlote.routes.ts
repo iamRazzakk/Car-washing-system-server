@@ -5,15 +5,21 @@ import auth from "../../middleware/auth";
 import { carSlotValidationSchema } from "./carSlot.validation";
 
 const router = Router();
-// create service route
+// Create a single slot (Admin only)
 router.post(
   "/",
   auth("ADMIN"),
   ValidationRequest(carSlotValidationSchema.serviceScheduleSchema),
   carSlotController.createSingleSlot
 );
+
+// Get all available slots
 router.get("/", carSlotController.getAllAvailableSlots);
-router.get("/:id", carSlotController.getSlotsByServiceId);
+
+// Get slots by service ID
+router.get("/:id", carSlotController.getSingleSloteById);
+
+// Update slot status (Admin only)
 router.put(
   "/update-status/:id",
   auth("ADMIN"),

@@ -49,13 +49,13 @@ const updateSlotStatus = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const getSlotsByServiceId = catchAsync(async (req: Request, res: Response) => {
-    const { serviceId } = req.params; // Get serviceId from params
-    const result = await carServiceSlot.getSlotsByServiceIdFromDB(serviceId);
+const getSingleSloteById = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await carServiceSlot.getSingleSlote(id);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Slots retrieved successfully",
+        message: "Single Slots retrieved successfully",
         data: result,
     });
 });
@@ -65,5 +65,5 @@ export const carSlotController = {
     createSingleSlot,
     getAllAvailableSlots,
     updateSlotStatus,
-    getSlotsByServiceId
+    getSingleSloteById
 };

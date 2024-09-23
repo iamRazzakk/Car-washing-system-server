@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { orderService } from "./order.service";
+import catchAsync from "../../utils/catchAsync";
 
 const createOrderController = async (req: Request, res: Response) => {
   try {
@@ -18,6 +19,16 @@ const createOrderController = async (req: Request, res: Response) => {
     });
   }
 };
+
+const getAllOrderController = catchAsync(async(req:Request, res:Response)=>{
+  const orders = await orderService.getAllOrders();
+    res.status(200).json({
+      success: true,
+      message: 'Orders retrieved successfully',
+      data: orders,
+    });
+})
 export const createOrder = {
   createOrderController,
+  getAllOrderController
 };

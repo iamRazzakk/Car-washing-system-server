@@ -30,4 +30,4 @@ const CarSlotSchema: Schema<TServiceSchedule> = new Schema({
     }
 }, { timestamps: true }); 
 
-export const carSlotBookingSlot = model<TServiceSchedule>('carBookingSlot', CarSlotSchema); // Export the model
+export const carSlotBookingSlot = model<TServiceSchedule>('carBookingSlot', CarSlotSchema);

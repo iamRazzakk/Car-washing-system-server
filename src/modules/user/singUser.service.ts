@@ -1,15 +1,17 @@
+import httpStatus from "http-status";
 import AppError from "../../error/AppError";
 import { TSingUpUser } from "./singUser.interface"
 import { UserModel } from "./singUser.model"
 
 // Create a new user
-const createUser = async (payload: TSingUpUser) => {
+const createUser = async (userData: TSingUpUser) => {
     try {
-        const user = await UserModel.create(payload);
-        return user;
+        // Create the user
+        const newUser = await UserModel.create(userData);
+        return newUser;
     } catch (error) {
         console.error('Failed to create user:', error);
-        throw new Error('Failed to create user');
+        throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create user");
     }
 };
 

@@ -7,62 +7,74 @@ import { CarServiceModel } from "../service/carServiceModel";
 
 // Service to create a slot and insert it into the database
 const createSlotIntoDB = async (payload: TServiceSchedule) => {
-    const isServiceExist = await CarServiceModel.findById(payload.service);
-    if (!isServiceExist) {
-        throw new AppError(httpStatus.NOT_FOUND, "Service does not exist");
+  const isServiceExist = await CarServiceModel.findById(payload.service);
+  if (!isServiceExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "Service does not exist");
+  }
+  const durations = isServiceExist.duration;
+  try {
+    const slots = await GenerateTimeSlots(payload, durations); // Generate time slots
+    if (slots.length === 0) {
+      throw new AppError(
+        httpStatus.NOT_FOUND,
+        "No slots available for the provided time."
+      );
     }
-    const durations = isServiceExist.duration;
-    try {
-        const slots = await GenerateTimeSlots(payload, durations); // Generate time slots
-        if (slots.length === 0) {
-            throw new AppError(httpStatus.NOT_FOUND, "No slots available for the provided time.");
-        }
-        const result = await carSlotBookingSlot.insertMany(slots); // Insert the generated slots into the DB
-        return result;
-    } catch (error) {
-        const message = error instanceof Error ? error.message : "Error occurred while creating slots";
-        throw new AppError(httpStatus.BAD_REQUEST, message);
-    }
+    const result = await carSlotBookingSlot.insertMany(slots); // Insert the generated slots into the DB
+    return result;
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Error occurred while creating slots";
+    throw new AppError(httpStatus.BAD_REQUEST, message);
+  }
 };
 
 // Service to get all available slots
 const getAllAvailableSlotFromDB = async () => {
-    const result = await carSlotBookingSlot.find({}).populate("service");
-    if (result.length === 0) {
-        throw new AppError(httpStatus.NOT_FOUND, "No slots found");
-    }
-    return result;
+  const result = await carSlotBookingSlot.find({}).populate("service");
+  if (result.length === 0) {
+    throw new AppError(httpStatus.NOT_FOUND, "No slots found");
+  }
+  return result;
 };
 
 // Service to update a slot in the database
-const updateSlotStatusInDB = async (id: string, status: "available" | "canceled") => {
-    const slot = await carSlotBookingSlot.findById(id);
-    if (!slot) {
-        throw new AppError(httpStatus.NOT_FOUND, "Slot not found");
-    }
+const updateSlotStatusInDB = async (
+  id: string,
+  status: "available" | "canceled"
+) => {
+  const slot = await carSlotBookingSlot.findById(id);
+  if (!slot) {
+    throw new AppError(httpStatus.NOT_FOUND, "Slot not found");
+  }
 
-    if (slot.isBooked === "booked") {
-        throw new AppError(httpStatus.FORBIDDEN, "Cannot update the status of a booked slot");
-    }
+  if (slot.isBooked === "booked") {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "Cannot update the status of a booked slot"
+    );
+  }
 
-    slot.isBooked = status;
-    await slot.save();
+  slot.isBooked = status;
+  await slot.save();
 
-    return slot;
+  return slot;
 };
 
-const getSlotsByServiceIdFromDB = async (id: string) => {
-    // get data from database using id
-    const serviceData = await carSlotBookingSlot.findById(id)
-    if (!serviceData) {
-        throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
-    }
-    return serviceData
-}
+const getSingleSlote = async (id: string) => {
+  // get data from database using id
+  const result = await carSlotBookingSlot.findById(id);
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");
+  }
+  return result;
+};
 
 export const carServiceSlot = {
-    createSlotIntoDB,
-    getAllAvailableSlotFromDB,
-    updateSlotStatusInDB, 
-    getSlotsByServiceIdFromDB
+  createSlotIntoDB,
+  getAllAvailableSlotFromDB,
+  updateSlotStatusInDB,
+  getSingleSlote,
 };

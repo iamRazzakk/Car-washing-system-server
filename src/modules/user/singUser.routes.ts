@@ -5,7 +5,7 @@ import { ValidationRequest } from "../../middleware/validationRequest";
 import auth from "../../middleware/auth";
 const router = express.Router();
 router.post(
-  "/singup",
+  "/user/signup",
   ValidationRequest(singUpValidationSchema.createSignUpValidationSchema),
   userController.createUser
 );

@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import AppError from "../../error/AppError";
 import { initiatePayment } from "../payment/payment.utils";
 import Order from "./order.model";
 
@@ -7,7 +9,7 @@ const createOrder = async (orderData: any) => {
 
   const transactionId = `TXN-${Date.now()}`;
 
-  const order = new Order({
+  await Order.create({
     user: {
       name: user?.name,
       email: user?.email,
@@ -22,13 +24,10 @@ const createOrder = async (orderData: any) => {
     },
     serviceDetails,
     totalPrice: serviceDetails?.price,
-    status: "Pending",
-    paymentStatus: "Pending",
+    status: "Success",
+    paymentStatus: "Paid",
     transactionId,
   });
-
-  // Save the order to the database
-  await order.save();
 
   // Payment initiation data (integrate AmarPay here)
   const paymentData = {
@@ -47,6 +46,15 @@ const createOrder = async (orderData: any) => {
   return paymentSession;
 };
 
+const getAllOrders = async () => {
+  const orders = await Order.find();
+  if (!orders || orders.length === 0) {
+    throw new AppError(httpStatus.NOT_FOUND, 'No orders found');
+  }
+  return orders;
+}
+
 export const orderService = {
   createOrder,
+  getAllOrders
 };

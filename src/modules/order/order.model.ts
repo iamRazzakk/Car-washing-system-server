@@ -48,13 +48,11 @@ const OrderSchema: Schema = new Schema(
         totalPrice: { type: Number, required: true },
         status: {
             type: String,
-            enum: ['Pending', 'Paid', 'Cancelled'],
-            default: 'Pending',
+            enum: ["Pending",'Success'],
         },
         paymentStatus: {
             type: String,
-            enum: ['Pending', 'Paid', 'Failed'],
-            default: 'Pending',
+            enum: ['Pending', 'Paid'],
         },
         transactionId: { type: String, required: true },
     },

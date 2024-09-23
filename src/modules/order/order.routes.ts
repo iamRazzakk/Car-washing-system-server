@@ -5,5 +5,6 @@ const router = Router();
 
 // Route to create an order
 router.post('/', createOrder.createOrderController);
+router.get('/orders', createOrder.getAllOrderController);
 
 export const orderRoutes = router;
