@@ -1,15 +1,19 @@
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
-import { Request } from 'express';
+import { cloudinaryConfig } from '.';
 
-const storage = multer.memoryStorage(); 
+// Define the parameters type
+interface CloudinaryParams {
+  folder: string;
+  allowed_formats: string[];
+}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const fileFilter = (req: Request, file: Express.Multer.File, cb: any) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true); 
-  } else {
-    cb(new Error('Not an image! Please upload images only.'), false);
-  }
-};
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinaryConfig,
+  params: {
+    folder: 'avatars',  
+    allowed_formats: ['jpg', 'png', 'jpeg'],
+  } as CloudinaryParams, 
+});
 
-export const upload = multer({ storage, fileFilter });
+export const upload = multer({ storage });

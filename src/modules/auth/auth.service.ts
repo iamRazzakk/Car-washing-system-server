@@ -1,9 +1,8 @@
 import bcrypt from "bcryptjs";
 import { UserModel } from "../user/singUser.model";
 import { TChangePassoword, TUserLogin } from "./auth.interface";
-import config from "../../config";
+import config, { cloudinaryConfig } from "../../config";
 import jwt from "jsonwebtoken";
-
 const LoginUser = async (loginData: TUserLogin) => {
   const { email, password } = loginData;
 
@@ -59,19 +58,42 @@ const passwordChangeIntoDB = async (payload: TChangePassoword) => {
 
   const updatedUser = await UserModel.findById(user._id);
 
-  return {
+return {
     success: true,
     message: "Password changed successfully",
     updatedUser: {
-      _id: updatedUser._id as string,
-      name: updatedUser.name as string,
-      email: updatedUser.email as string,
-      phone: updatedUser.phone as string,
-      role: updatedUser.role as string,
-      address: updatedUser.address as string,
+      _id: updatedUser._id !,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      role: updatedUser.role,
+      address: updatedUser.address,
     },
   };
 };
+
+
+// todo upload img in cloudenary file 
+
+const uploadAvatarToCloudinary = async (file: Express.Multer.File) => {
+  try {
+    const result = await cloudinaryConfig.uploader.upload(file.path, {
+      folder: 'avatars',
+      public_id: file.originalname.split('.')[0],
+    });
+    return {
+      url: result.secure_url,
+      publicId: result.public_id,
+    };
+  } catch (error) {
+    throw new Error('Failed to upload image to Cloudinary: ' + error.message);
+  }
+};
+
+
+
+
+
 
 
 const RefreshTokenService = async (refreshToken: string) => {
@@ -96,5 +118,6 @@ const RefreshTokenService = async (refreshToken: string) => {
 export const AuthService = {
   LoginUser,
   passwordChangeIntoDB,
+  uploadAvatarToCloudinary,
   RefreshTokenService,
 };

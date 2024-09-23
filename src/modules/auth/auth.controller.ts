@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
@@ -54,6 +54,25 @@ const authPasswordChange = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+const uploadAvatar = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const result = await AuthService.uploadAvatarToCloudinary(req.file);
+    res.status(200).json({ success: true, avatarUrl: result.url });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+
+
 const refreshToken = async (req: Request, res: Response) => {
   try {
     // console.log(req.body);
@@ -82,5 +101,6 @@ const refreshToken = async (req: Request, res: Response) => {
 export const AuthContoller = {
   AuthLoginController,
   authPasswordChange,
+  uploadAvatar,
   refreshToken,
 };

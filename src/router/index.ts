@@ -6,6 +6,7 @@ import { carSloteRouter } from "../modules/slot/carSlote.routes";
 import { bookServiceRouter } from "../modules/bookService/bookService.routes";
 import { orderRoutes } from "../modules/order/order.routes";
 import { paymentRoutes } from "../modules/payment/payment.routes";
+import { ReviewRoute } from "../modules/reviews/review.routes";
 
 const router = Router();
 const appRouterModel = [
@@ -18,6 +19,7 @@ const appRouterModel = [
   { path: "/payments", routerFile: orderRoutes },
   { path: "/", routerFile: orderRoutes },
   { path: "/payments", routerFile: paymentRoutes },
+  { path: "/", routerFile: ReviewRoute },
 ];
 appRouterModel.forEach((route) => router.use(route.path, route.routerFile));
 export const Routers = router;
