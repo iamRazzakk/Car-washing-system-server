@@ -25,6 +25,17 @@ const createReviewIntoDB = async (reviewData: TReview) => {
     }
 };
 
+
+const getAllReviewsFromDB = async () => {
+    const result = await ReviewModel.find({}).populate("user");
+    if (result.length === 0) {
+      throw new AppError(httpStatus.NOT_FOUND, "No Review found");
+    }
+    return result;
+  };
+
+
 export const reviewService = {
     createReviewIntoDB,
+    getAllReviewsFromDB
 };

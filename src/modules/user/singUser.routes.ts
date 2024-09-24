@@ -11,10 +11,10 @@ router.post(
 );
 
 //get all user
-router.get("/users", auth("ADMIN"), userController.getUserList);
+router.get("/auth/users", auth("ADMIN"), userController.getUserList);
 // update user role
 router.patch(
-    '/users/:userId/role',ValidationRequest(singUpValidationSchema.updateUserRoleValidationSchema), 
+    '/auth/users/:userId/role',ValidationRequest(singUpValidationSchema.updateUserRoleValidationSchema), 
     auth("ADMIN"),userController.editUserRole,
 );
 export const UserRoute = router;

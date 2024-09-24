@@ -32,7 +32,7 @@ const updateSlotStatus = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params; // Get id from params
     const { status } = req.body;
 
-    if (!["available", "canceled"].includes(status)) {
+    if (!["available","booked", "canceled"].includes(status)) {
         return res.status(httpStatus.BAD_REQUEST).json({
             statusCode: httpStatus.BAD_REQUEST,
             success: false,

@@ -9,7 +9,7 @@ const router = Router()
 router.post('/login', ValidationRequest(AuthValidationSchema.userLoginValidationSchema), AuthContoller.AuthLoginController)
 // Password change route
 router.post('/change-password', ValidationRequest(AuthValidationSchema.userChangePasswordValidationSchema), AuthContoller.authPasswordChange);
-router.post('/upload-avatar', upload.single('avatar'), AuthContoller.uploadAvatar);
+router.post('/upload-avatar', upload.single('profilePicture'), AuthContoller.uploadImage);
 
 router.post('/refresh-token', ValidationRequest(AuthValidationSchema.refreshTokenValidationSchema), AuthContoller.refreshToken);
 export const logingRouter = router

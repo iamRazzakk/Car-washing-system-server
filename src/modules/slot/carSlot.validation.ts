@@ -37,12 +37,13 @@ const serviceScheduleSchema = z.object({
 });
 const updateSlotStatusSchema = z.object({
   body: z.object({
-    status: z.enum(["available", "canceled"], {
+    status: z.enum(["available", "booked", "canceled"], {
       required_error: "Status is required",
       invalid_type_error: "Invalid status",
     }),
   }),
 });
+
 
 export const carSlotValidationSchema = {
   serviceScheduleSchema,

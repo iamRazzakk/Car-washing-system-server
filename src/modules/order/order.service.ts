@@ -22,7 +22,15 @@ const createOrder = async (orderData: any) => {
       manufacturingYear: vehicleDetails?.manufacturingYear,
       registrationPlate: vehicleDetails?.registrationPlate,
     },
-    serviceDetails,
+    serviceDetails: {
+      serviceId: serviceDetails?.serviceId,
+      serviceName: serviceDetails?.serviceName,
+      startTime: serviceDetails?.startTime,
+      endTime: serviceDetails?.endTime,
+      duration: serviceDetails?.duration,
+      price: serviceDetails?.price,
+      date: serviceDetails?.date,
+    },
     totalPrice: serviceDetails?.price,
     status: "Success",
     paymentStatus: "Paid",
@@ -49,12 +57,12 @@ const createOrder = async (orderData: any) => {
 const getAllOrders = async () => {
   const orders = await Order.find();
   if (!orders || orders.length === 0) {
-    throw new AppError(httpStatus.NOT_FOUND, 'No orders found');
+    throw new AppError(httpStatus.NOT_FOUND, "No orders found");
   }
   return orders;
-}
+};
 
 export const orderService = {
   createOrder,
-  getAllOrders
+  getAllOrders,
 };

@@ -3,6 +3,9 @@ import { AuthService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import config from "../../config";
+import multer from "multer";
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const AuthLoginController = async (req: Request, res: Response) => {
   try {
@@ -56,16 +59,20 @@ const authPasswordChange = async (req: Request, res: Response) => {
 };
 
 
-const uploadAvatar = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
+const uploadImage = async (req:Request, res:Response) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded.' });
+  }
 
-    const result = await AuthService.uploadAvatarToCloudinary(req.file);
-    res.status(200).json({ success: true, avatarUrl: result.url });
+  try {
+    const imageUrl = await AuthService.uploadImageToImgBB(req.file.buffer);
+    res.json({
+      message: 'File uploaded successfully!',
+      imageUrl,
+    });
   } catch (error) {
-    next(error);
+    console.error('Error uploading to ImgBB:', error);
+    res.status(500).json({ message: 'Failed to upload image.' });
   }
 };
 
@@ -101,6 +108,6 @@ const refreshToken = async (req: Request, res: Response) => {
 export const AuthContoller = {
   AuthLoginController,
   authPasswordChange,
-  uploadAvatar,
+  uploadImage,
   refreshToken,
 };

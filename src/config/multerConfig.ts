@@ -1,19 +1,12 @@
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import multer from 'multer';
-import { cloudinaryConfig } from '.';
+import multer from "multer";
 
-// Define the parameters type
-interface CloudinaryParams {
-  folder: string;
-  allowed_formats: string[];
-}
-
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinaryConfig,
-  params: {
-    folder: 'avatars',  
-    allowed_formats: ['jpg', 'png', 'jpeg'],
-  } as CloudinaryParams, 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${req.user.id}-avatar-${Date.now()}.${file.mimetype.split("/")[1]}`);
+  },
 });
 
-export const upload = multer({ storage });
+export const upload = multer({ storage: storage });

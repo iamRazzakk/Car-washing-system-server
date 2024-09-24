@@ -3,6 +3,8 @@ import { UserModel } from "../user/singUser.model";
 import { TChangePassoword, TUserLogin } from "./auth.interface";
 import config, { cloudinaryConfig } from "../../config";
 import jwt from "jsonwebtoken";
+import axios from "axios";
+import { string } from "zod";
 const LoginUser = async (loginData: TUserLogin) => {
   const { email, password } = loginData;
 
@@ -75,26 +77,23 @@ return {
 
 // todo upload img in cloudenary file 
 
-const uploadAvatarToCloudinary = async (file: Express.Multer.File) => {
+const uploadImageToImgBB = async (imageBuffer) => {
   try {
-    const result = await cloudinaryConfig.uploader.upload(file.path, {
-      folder: 'avatars',
-      public_id: file.originalname.split('.')[0],
-    });
-    return {
-      url: result.secure_url,
-      publicId: result.public_id,
+    const formData = {
+      image: imageBuffer.toString('base64'), // Convert buffer to base64
     };
+
+    const response = await axios.post(`${config.IMGBB_API_URL}?key=${config.IMGBB_API_KEY}`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return response.data.data.url; // Return the uploaded image URL
   } catch (error) {
-    throw new Error('Failed to upload image to Cloudinary: ' + error.message);
+    throw new Error('Failed to upload image to ImgBB: ' + error.message);
   }
 };
-
-
-
-
-
-
 
 const RefreshTokenService = async (refreshToken: string) => {
   try {
@@ -103,7 +102,7 @@ const RefreshTokenService = async (refreshToken: string) => {
       config.REFRESH_JWT_SECRET as string
     );
     const newAccessToken = jwt.sign(
-      { _id: payload._id, email: payload.email, role: payload.role },
+      { _id: payload._id, email: payload.email, role: payload?.role },
       config.JWT_SECRET as string,
       { expiresIn: config.JWT_E_IN as string }
     );
@@ -118,6 +117,6 @@ const RefreshTokenService = async (refreshToken: string) => {
 export const AuthService = {
   LoginUser,
   passwordChangeIntoDB,
-  uploadAvatarToCloudinary,
+  uploadImageToImgBB,
   RefreshTokenService,
 };

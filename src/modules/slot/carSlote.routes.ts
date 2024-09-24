@@ -22,7 +22,6 @@ router.get("/:id", carSlotController.getSingleSloteById);
 // Update slot status (Admin only)
 router.put(
   "/update-status/:id",
-  auth("ADMIN"),
   ValidationRequest(carSlotValidationSchema.updateSlotStatusSchema),
   carSlotController.updateSlotStatus
 );
