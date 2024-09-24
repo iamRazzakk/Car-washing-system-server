@@ -1,5 +1,5 @@
+"use strict";
 // import multer from "multer";
-
 // // Define the IUser interface
 // export interface IUser {
 //   id: string;
@@ -7,7 +7,6 @@
 //   email: string;
 //   role: string;
 // }
-
 // // Extend Express Request interface to include IUser
 // declare global {
 //   namespace Express {
@@ -16,7 +15,6 @@
 //     }
 //   }
 // }
-
 // // Multer storage configuration
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {
@@ -30,6 +28,5 @@
 //     }
 //   },
 // });
-
 // // Create the multer instance
 // export const upload = multer({ storage });

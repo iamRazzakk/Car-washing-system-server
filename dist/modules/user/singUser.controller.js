@@ -17,20 +17,49 @@ const singUser_model_1 = require("./singUser.model");
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
-const AppError_1 = __importDefault(require("../../error/AppError"));
+// import AppError from "../../error/AppError";
+const singUser_service_1 = require("./singUser.service");
 const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = req.body;
-    const existingUser = yield singUser_model_1.UserModel.findOne({ email: userData.email });
-    if (existingUser) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "A user with this email already exists.");
-    }
-    // Create the user
-    const result = yield singUser_model_1.UserModel.create(userData);
+    // Call the service to create the user
+    const newUser = yield singUser_service_1.UserService.createUser(userData);
+    // Send response
     (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
+        statusCode: http_status_1.default.CREATED,
         success: true,
         message: "User registered successfully",
-        data: result,
+        data: newUser,
     });
 }));
-exports.userController = { createUser };
+const editUserRole = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const { role } = req.body;
+    const updatedUser = yield singUser_service_1.UserService.updateUserRole(userId, role);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: "User role updated successfully",
+        data: updatedUser,
+    });
+}));
+// get all user
+const getUserList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield singUser_model_1.UserModel.find();
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            message: "Users fetched successfully",
+            data: users,
+        });
+    }
+    catch (error) {
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.BAD_REQUEST,
+            success: false,
+            message: "Failed to fetch users",
+            data: error,
+        });
+    }
+});
+exports.userController = { createUser, editUserRole, getUserList };

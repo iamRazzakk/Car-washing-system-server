@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CastErrorHandler = void 0;
 const castErrorHandler = (err) => {
-    const errorMessages = [
+    const errorSources = [
         {
             path: err === null || err === void 0 ? void 0 : err.path,
             message: `Invalid ${err === null || err === void 0 ? void 0 : err.kind} value: ${err === null || err === void 0 ? void 0 : err.value}`,
@@ -12,7 +12,7 @@ const castErrorHandler = (err) => {
     return {
         statusCode: statusCode,
         message: "Invalid _id",
-        errorMessages,
+        errorSources,
     };
 };
 exports.CastErrorHandler = castErrorHandler;

@@ -17,6 +17,9 @@ const auth_service_1 = require("./auth.service");
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../config"));
+// import multer from "multer";
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage });
 const AuthLoginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const loginData = req.body;
@@ -24,14 +27,14 @@ const AuthLoginController = (req, res) => __awaiter(void 0, void 0, void 0, func
         const { refreshToken } = result;
         res.cookie("refreshToke", refreshToken, {
             secure: config_1.default.NODE_DEV === "production",
-            httpOnly: true
+            httpOnly: true,
         });
         (0, sendResponse_1.default)(res, {
             statusCode: http_status_1.default.OK,
             success: true,
             message: "User login successfully",
             accessToke: result.accessToken,
-            refreshToke: result.refreshToken,
+            // refreshToke: result.refreshToken,
             data: result.user,
         });
     }
@@ -68,28 +71,43 @@ const authPasswordChange = (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
     }
 });
-const refreshToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        console.log(req.body);
-        const result = yield auth_service_1.AuthService.RefreshTokenService(req.body.refreshToken);
-        (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.OK,
-            success: true,
-            message: "Token refreshed successfully",
-            data: result.accessToken,
-        });
-    }
-    catch (error) {
-        (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
-            success: false,
-            message: "Failed to refresh token",
-            data: error,
-        });
-    }
-});
+// const uploadImage = async (req:Request, res:Response) => {
+//   if (!req.file) {
+//     return res.status(400).json({ message: 'No file uploaded.' });
+//   }
+//   try {
+//     const imageUrl = await AuthService.uploadImageToImgBB(req.file.buffer);
+//     res.json({
+//       message: 'File uploaded successfully!',
+//       imageUrl,
+//     });
+//   } catch (error) {
+//     console.error('Error uploading to ImgBB:', error);
+//     res.status(500).json({ message: 'Failed to upload image.' });
+//   }
+// };
+// const refreshToken = async (req: Request, res: Response) => {
+//   try {
+//     // console.log(req.body);
+//     const result = await AuthService.RefreshTokenService(req.body.refreshToken);
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "Token refreshed successfully",
+//       data: result.accessToken,
+//     });
+//   } catch (error) {
+//     sendResponse(res, {
+//       statusCode: httpStatus.BAD_REQUEST,
+//       success: false,
+//       message: "Failed to refresh token",
+//       data: error,
+//     });
+//   }
+// };
 exports.AuthContoller = {
     AuthLoginController,
     authPasswordChange,
-    refreshToken
+    // uploadImage,
+    // refreshToken,
 };

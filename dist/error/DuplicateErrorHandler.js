@@ -1,20 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DuplicateErrorHandler = void 0;
-const duplicateErrorHandler = (err) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DuplicateErrorHandler = (err) => {
+    // Extract value within double quotes using regex
     const match = err.message.match(/"([^"]*)"/);
+    // The extracted value will be in the first capturing group
     const extractedMessage = match && match[1];
-    const errorMessages = [
+    const errorSources = [
         {
-            path: err === null || err === void 0 ? void 0 : err.code,
-            message: `Duplicate value for ${extractedMessage} field`,
+            path: '',
+            message: `${extractedMessage} is already exists`,
         },
     ];
     const statusCode = 400;
     return {
-        statusCode: statusCode,
-        message: `Duplicate ${extractedMessage}`,
-        errorMessages,
+        statusCode,
+        message: 'Invalid ID',
+        errorSources,
     };
 };
-exports.DuplicateErrorHandler = duplicateErrorHandler;
+exports.default = DuplicateErrorHandler;

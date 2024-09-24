@@ -1,5 +1,5 @@
+"use strict";
 // import { cloudinaryConfig } from "../../config";
-
 // export const uploadToCloudinary = async (fileBuffer: Buffer, folder: string) => {
 //     try {
 //       const result = await cloudinaryConfig.uploader.upload_stream({ folder }, (error, result) => {

@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModel = void 0;
 const mongoose_1 = require("mongoose");
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -42,10 +42,10 @@ const userSchema = new mongoose_1.Schema({
     role: {
         type: String,
         enum: ["ADMIN", "USER"],
-        required: [true, "Role i s required"],
+        default: "USER",
         trim: true,
     },
-    address: { type: String, required: true },
+    address: { type: String, trim: true, required: [true, "Address is required"] },
     passwordCreatedAt: {
         type: Date,
         trim: true,
@@ -57,7 +57,7 @@ userSchema.pre("save", function (next) {
             const user = this;
             if (user.isModified("password")) {
                 const saltRounds = 12;
-                const hashedPassword = yield bcrypt_1.default.hash(user.password, saltRounds);
+                const hashedPassword = yield bcryptjs_1.default.hash(user.password, saltRounds);
                 // Set the hashed password
                 user.password = hashedPassword;
             }

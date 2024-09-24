@@ -13,17 +13,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const singUser_model_1 = require("../user/singUser.model");
-const config_1 = __importDefault(require("../../config"));
+// import config, { cloudinaryConfig } from "../../config";
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const config_1 = __importDefault(require("../../config"));
+// import axios from "axios";
 const LoginUser = (loginData) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = loginData;
-    const user = yield singUser_model_1.UserModel.findOne({ email }).select("+password");
+    // Trim email to avoid issues with spaces
+    const trimmedEmail = email.trim();
+    const user = yield singUser_model_1.UserModel.findOne({ email: trimmedEmail }).select("+password");
     if (!user) {
         throw new Error("Invalid email or password");
     }
-    const isMatch = yield bcrypt_1.default.compare(password, user.password);
+    // Compare the trimmed password
+    const isMatch = yield bcryptjs_1.default.compare(password.trim(), user.password);
     if (!isMatch) {
         throw new Error("Invalid email or password");
     }
@@ -33,38 +38,59 @@ const LoginUser = (loginData) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const passwordChangeIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, newPassword, oldPassword } = payload;
-    const user = yield singUser_model_1.UserModel.findOneAndUpdate({ email }).select("+password");
+    const user = yield singUser_model_1.UserModel.findOne({ email }).select("+password");
     if (!user) {
         throw new Error("User does not exist");
     }
-    const isMatch = yield bcrypt_1.default.compare(oldPassword, user.password);
+    const isMatch = yield bcryptjs_1.default.compare(oldPassword, user.password);
     if (!isMatch) {
         throw new Error("Old password is incorrect");
     }
-    const hashedNewPassword = yield bcrypt_1.default.hash(newPassword, 12);
-    user.password = hashedNewPassword;
-    const updatedUser = yield user.save();
-    if (!updatedUser) {
-        throw new Error("Failed to change password");
-    }
+    const hashedNewPassword = yield bcryptjs_1.default.hash(newPassword, 12);
+    yield singUser_model_1.UserModel.findByIdAndUpdate(user._id, { password: hashedNewPassword }, { new: true });
+    const updatedUser = yield singUser_model_1.UserModel.findById(user._id);
     return {
         success: true,
         message: "Password changed successfully",
+        updatedUser
     };
 });
-const RefreshTokenService = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const payload = jsonwebtoken_1.default.verify(refreshToken, config_1.default.REFRESH_JWT_SECRET);
-        const newAccessToken = jsonwebtoken_1.default.sign({ _id: payload._id, email: payload.email, role: payload.role }, config_1.default.JWT_SECRET, { expiresIn: config_1.default.JWT_E_IN });
-        console.log("New Access token", newAccessToken);
-        return { accessToken: newAccessToken };
-    }
-    catch (error) {
-        throw new Error("Invalid or expired refresh token");
-    }
-});
+// todo upload img in cloudenary file 
+// const uploadImageToImgBB = async (imageBuffer) => {
+//   try {
+//     const formData = {
+//       image: imageBuffer.toString('base64'), // Convert buffer to base64
+//     };
+//     const response = await axios.post(`${config.IMGBB_API_URL}?key=${config.IMGBB_API_KEY}`, formData, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     });
+//     return response.data.data.url; // Return the uploaded image URL
+//   } catch (error) {
+//     throw new Error('Failed to upload image to ImgBB: ' + error.message);
+//   }
+// };
+// const RefreshTokenService = async (refreshToken: string) => {
+//   try {
+//     const payload = jwt.verify(
+//       refreshToken,
+//       config.REFRESH_JWT_SECRET as string
+//     );
+//     const newAccessToken = jwt.sign(
+//       { _id: payload._id, email: payload.email, role: payload?.role },
+//       config.JWT_SECRET as string,
+//       { expiresIn: config.JWT_E_IN as string }
+//     );
+//     console.log("New Access token", newAccessToken);
+//     return { accessToken: newAccessToken };
+//   } catch (error) {
+//     throw new Error("Invalid or expired refresh token");
+//   }
+// };
 exports.AuthService = {
     LoginUser,
     passwordChangeIntoDB,
-    RefreshTokenService,
+    // uploadImageToImgBB,
+    // RefreshTokenService,
 };

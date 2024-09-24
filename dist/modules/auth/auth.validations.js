@@ -25,6 +25,14 @@ const userChangePasswordValidationSchema = zod_1.z.object({
         newPassword: passwordValidationSchema,
     }),
 });
+const editUserRoleSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        role: zod_1.z.enum(["USER", "ADMIN"], {
+            required_error: "Role is required",
+            invalid_type_error: "Invalid role type"
+        }),
+    }),
+});
 const refreshTokenValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         refreshToken: zod_1.z.string({
@@ -36,4 +44,5 @@ exports.AuthValidationSchema = {
     userLoginValidationSchema,
     userChangePasswordValidationSchema,
     refreshTokenValidationSchema,
+    editUserRoleSchema
 };

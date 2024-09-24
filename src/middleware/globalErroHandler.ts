@@ -23,7 +23,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res) => {
       const simplifiedError = ZodErrorHandler(err);
       statusCode = simplifiedError?.statusCode;
       message = simplifiedError?.message;
-      errorSources = simplifiedError?.errorSources;
+      errorSources = simplifiedError?.errorMessages;
     } else if (err?.name === 'ValidationError') {
       const simplifiedError = MongooseErrorHandler(err);
       statusCode = simplifiedError?.statusCode;

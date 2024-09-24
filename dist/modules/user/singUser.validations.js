@@ -28,9 +28,18 @@ const createSignUpValidationSchema = zod_1.z.object({
         address: zod_1.z.string({
             required_error: "Address is required",
             invalid_type_error: "Address is must be a string",
-        }).optional(),
+        }),
+    }),
+});
+const updateUserRoleValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        role: zod_1.z.enum(["ADMIN", "USER"], {
+            required_error: "Role is required",
+            invalid_type_error: "Role must be one of 'ADMIN' or 'USER'",
+        }),
     }),
 });
 exports.singUpValidationSchema = {
-    createSignUpValidationSchema
+    createSignUpValidationSchema,
+    updateUserRoleValidationSchema
 };

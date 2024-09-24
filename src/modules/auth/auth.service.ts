@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import { UserModel } from "../user/singUser.model";
 import { TChangePassoword, TUserLogin } from "./auth.interface";
-import config, { cloudinaryConfig } from "../../config";
+// import config, { cloudinaryConfig } from "../../config";
 import jwt from "jsonwebtoken";
-import axios from "axios";
-import { string } from "zod";
+import config from "../../config";
+// import axios from "axios";
 const LoginUser = async (loginData: TUserLogin) => {
   const { email, password } = loginData;
 
@@ -63,60 +63,53 @@ const passwordChangeIntoDB = async (payload: TChangePassoword) => {
 return {
     success: true,
     message: "Password changed successfully",
-    updatedUser: {
-      _id: updatedUser._id !,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      phone: updatedUser.phone,
-      role: updatedUser.role,
-      address: updatedUser.address,
-    },
+    updatedUser
   };
 };
 
 
 // todo upload img in cloudenary file 
 
-const uploadImageToImgBB = async (imageBuffer) => {
-  try {
-    const formData = {
-      image: imageBuffer.toString('base64'), // Convert buffer to base64
-    };
+// const uploadImageToImgBB = async (imageBuffer) => {
+//   try {
+//     const formData = {
+//       image: imageBuffer.toString('base64'), // Convert buffer to base64
+//     };
 
-    const response = await axios.post(`${config.IMGBB_API_URL}?key=${config.IMGBB_API_KEY}`, formData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+//     const response = await axios.post(`${config.IMGBB_API_URL}?key=${config.IMGBB_API_KEY}`, formData, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     });
 
-    return response.data.data.url; // Return the uploaded image URL
-  } catch (error) {
-    throw new Error('Failed to upload image to ImgBB: ' + error.message);
-  }
-};
+//     return response.data.data.url; // Return the uploaded image URL
+//   } catch (error) {
+//     throw new Error('Failed to upload image to ImgBB: ' + error.message);
+//   }
+// };
 
-const RefreshTokenService = async (refreshToken: string) => {
-  try {
-    const payload = jwt.verify(
-      refreshToken,
-      config.REFRESH_JWT_SECRET as string
-    );
-    const newAccessToken = jwt.sign(
-      { _id: payload._id, email: payload.email, role: payload?.role },
-      config.JWT_SECRET as string,
-      { expiresIn: config.JWT_E_IN as string }
-    );
-    console.log("New Access token", newAccessToken);
+// const RefreshTokenService = async (refreshToken: string) => {
+//   try {
+//     const payload = jwt.verify(
+//       refreshToken,
+//       config.REFRESH_JWT_SECRET as string
+//     );
+//     const newAccessToken = jwt.sign(
+//       { _id: payload._id, email: payload.email, role: payload?.role },
+//       config.JWT_SECRET as string,
+//       { expiresIn: config.JWT_E_IN as string }
+//     );
+//     console.log("New Access token", newAccessToken);
 
-    return { accessToken: newAccessToken };
-  } catch (error) {
-    throw new Error("Invalid or expired refresh token");
-  }
-};
+//     return { accessToken: newAccessToken };
+//   } catch (error) {
+//     throw new Error("Invalid or expired refresh token");
+//   }
+// };
 
 export const AuthService = {
   LoginUser,
   passwordChangeIntoDB,
-  uploadImageToImgBB,
-  RefreshTokenService,
+  // uploadImageToImgBB,
+  // RefreshTokenService,
 };

@@ -6,7 +6,7 @@ const CarSlotSchema = new mongoose_1.Schema({
     service: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "CarService",
-        required: [true, "Object id is required"]
+        required: [true, "Service ID is required"]
     },
     date: {
         type: String,
@@ -15,12 +15,12 @@ const CarSlotSchema = new mongoose_1.Schema({
     },
     startTime: {
         type: String,
-        required: [true, "start Time is required"],
+        required: [true, "Start Time is required"],
         trim: true
     },
     endTime: {
         type: String,
-        required: [true, "end time is required"],
+        required: [true, "End Time is required"],
         trim: true
     },
     isBooked: {
