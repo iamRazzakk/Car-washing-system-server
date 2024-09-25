@@ -11,16 +11,17 @@ const globalErroHandler_1 = __importDefault(require("./middleware/globalErroHand
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const auth_routes_1 = require("./modules/auth/auth.routes");
 const app = (0, express_1.default)();
-// parser 
+// parser
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: "http://localhost:5173"
+    origin: "https://car-wash-booking-system-frontend-dusky.vercel.app/",
+    credentials: true,
 }));
 app.use((0, cookie_parser_1.default)());
 // this is the main route for this application
-app.use('/api', router_1.Routers);
-app.use('/api/auth', auth_routes_1.logingRouter);
-app.get('/', (req, res) => {
+app.use("/api", router_1.Routers);
+app.use("/api/auth", auth_routes_1.logingRouter);
+app.get("/", (req, res) => {
     // res.send('Hello World!');
     res.json("Server is running");
 });

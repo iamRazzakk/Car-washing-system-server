@@ -86,7 +86,7 @@ const confirmationController = (0, catchAsync_1.default)((req, res) => __awaiter
             <h1>Payment Successful!</h1>
             <p>Your payment has been processed successfully.</p>
             <p>Thank you for choosing us!</p>
-            <a href="http://localhost:5173/" class="btn">Back to Homepage</a>
+            <a href="https://car-wash-booking-system-frontend-dusky.vercel.app/" class="btn">Back to Homepage</a>
         </div>
     </body>
     </html>
