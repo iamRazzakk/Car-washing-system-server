@@ -13,42 +13,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderService = void 0;
-const http_status_1 = __importDefault(require("http-status"));
+const order_model_1 = __importDefault(require("./order.model"));
 const AppError_1 = __importDefault(require("../../error/AppError"));
 const payment_utils_1 = require("../payment/payment.utils");
-const order_model_1 = __importDefault(require("./order.model"));
+const http_status_1 = __importDefault(require("http-status"));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createOrder = (orderData) => __awaiter(void 0, void 0, void 0, function* () {
     const { user, vehicleDetails, serviceDetails } = orderData;
+    // Generate unique transaction ID
     const transactionId = `TXN-${Date.now()}`;
-    yield order_model_1.default.create({
+    const newOrder = yield order_model_1.default.create({
         user: {
-            name: user === null || user === void 0 ? void 0 : user.name,
-            email: user === null || user === void 0 ? void 0 : user.email,
-            address: user === null || user === void 0 ? void 0 : user.address,
+            name: user.name,
+            email: user.email,
+            address: user.address,
         },
         vehicleDetails: {
-            vehicleType: vehicleDetails === null || vehicleDetails === void 0 ? void 0 : vehicleDetails.vehicleType,
-            vehicleBrand: vehicleDetails === null || vehicleDetails === void 0 ? void 0 : vehicleDetails.vehicleBrand,
-            vehicleModel: vehicleDetails === null || vehicleDetails === void 0 ? void 0 : vehicleDetails.vehicleModel,
-            manufacturingYear: vehicleDetails === null || vehicleDetails === void 0 ? void 0 : vehicleDetails.manufacturingYear,
-            registrationPlate: vehicleDetails === null || vehicleDetails === void 0 ? void 0 : vehicleDetails.registrationPlate,
+            vehicleType: vehicleDetails.vehicleType,
+            vehicleBrand: vehicleDetails.vehicleBrand,
+            vehicleModel: vehicleDetails.vehicleModel,
+            manufacturingYear: vehicleDetails.manufacturingYear,
+            registrationPlate: vehicleDetails.registrationPlate,
         },
         serviceDetails: {
-            serviceId: serviceDetails === null || serviceDetails === void 0 ? void 0 : serviceDetails.serviceId,
-            serviceName: serviceDetails === null || serviceDetails === void 0 ? void 0 : serviceDetails.serviceName,
-            startTime: serviceDetails === null || serviceDetails === void 0 ? void 0 : serviceDetails.startTime,
-            endTime: serviceDetails === null || serviceDetails === void 0 ? void 0 : serviceDetails.endTime,
-            duration: serviceDetails === null || serviceDetails === void 0 ? void 0 : serviceDetails.duration,
-            price: serviceDetails === null || serviceDetails === void 0 ? void 0 : serviceDetails.price,
-            date: serviceDetails === null || serviceDetails === void 0 ? void 0 : serviceDetails.date,
+            serviceName: serviceDetails.serviceName,
+            price: serviceDetails.price,
+            startTime: serviceDetails.startTime,
+            endTime: serviceDetails.endTime,
+            duration: serviceDetails.duration,
+            date: serviceDetails.date,
         },
-        totalPrice: serviceDetails === null || serviceDetails === void 0 ? void 0 : serviceDetails.price,
-        status: "Success",
-        paymentStatus: "Paid",
+        totalPrice: serviceDetails.price,
+        status: "Pending",
+        paymentStatus: "Pending",
         transactionId,
     });
-    // Payment initiation data (integrate AmarPay here)
+    // console.log(newOrder);
+    // Prepare payment data for payment gateway
     const paymentData = {
         transactionId,
         totalPrice: serviceDetails.price,
@@ -57,15 +58,16 @@ const createOrder = (orderData) => __awaiter(void 0, void 0, void 0, function* (
         customerAddress: user.address,
         customerPhone: user.phone,
     };
-    // Initiate the payment session with AmarPay
+    // console.log("Payment Data is", paymentData);
+    // Initiate payment session
     const paymentSession = yield (0, payment_utils_1.initiatePayment)(paymentData);
-    console.log(paymentSession);
-    // Return payment session data to be handled in the frontend
-    return paymentSession;
+    // console.log("Payment session initiated", paymentSession);
+    // Return payment session data
+    return { newOrder, paymentSession };
 });
 const getAllOrders = () => __awaiter(void 0, void 0, void 0, function* () {
     const orders = yield order_model_1.default.find();
-    if (!orders || orders.length === 0) {
+    if (!orders.length) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "No orders found");
     }
     return orders;

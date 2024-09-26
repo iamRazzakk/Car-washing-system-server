@@ -42,6 +42,7 @@ const updateSingleCarServiceIntoDB = async (id: string,
         payload, {
         new: true,
         runValidators: true,
+        upsert: false,
     })
     if (!serviceData) {
         throw new AppError(httpStatus.NOT_FOUND, "Data Not Found");

@@ -28,6 +28,7 @@ const OrderSchema = new mongoose_1.Schema({
     user: {
         name: { type: String, required: true },
         email: { type: String, required: true },
+        address: { type: String, required: true },
     },
     vehicleDetails: {
         vehicleType: { type: String, required: true },
@@ -48,10 +49,12 @@ const OrderSchema = new mongoose_1.Schema({
     status: {
         type: String,
         enum: ["Pending", "Success"],
+        default: "Pending",
     },
     paymentStatus: {
         type: String,
         enum: ["Pending", "Paid"],
+        default: "Pending",
     },
     transactionId: { type: String, required: true },
 }, { timestamps: true });

@@ -18,7 +18,7 @@ const appRouterModel = [
   { path: "/bookings", routerFile: bookServiceRouter },
   { path: "/payments", routerFile: orderRoutes },
   { path: "/", routerFile: orderRoutes },
-  { path: "/payments", routerFile: paymentRoutes },
+  { path: "/payment", routerFile: paymentRoutes },
   { path: "/", routerFile: ReviewRoute },
 ];
 appRouterModel.forEach((route) => router.use(route.path, route.routerFile));

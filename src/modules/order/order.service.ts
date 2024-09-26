@@ -1,43 +1,44 @@
-import httpStatus from "http-status";
+import Order from "./order.model";
 import AppError from "../../error/AppError";
 import { initiatePayment } from "../payment/payment.utils";
-import Order from "./order.model";
+import httpStatus from "http-status";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createOrder = async (orderData: any) => {
   const { user, vehicleDetails, serviceDetails } = orderData;
 
+  // Generate unique transaction ID
   const transactionId = `TXN-${Date.now()}`;
 
-  await Order.create({
+  const newOrder = await Order.create({
     user: {
-      name: user?.name,
-      email: user?.email,
-      address: user?.address,
+      name: user.name,
+      email: user.email,
+      address: user.address,
     },
     vehicleDetails: {
-      vehicleType: vehicleDetails?.vehicleType,
-      vehicleBrand: vehicleDetails?.vehicleBrand,
-      vehicleModel: vehicleDetails?.vehicleModel,
-      manufacturingYear: vehicleDetails?.manufacturingYear,
-      registrationPlate: vehicleDetails?.registrationPlate,
+      vehicleType: vehicleDetails.vehicleType,
+      vehicleBrand: vehicleDetails.vehicleBrand,
+      vehicleModel: vehicleDetails.vehicleModel,
+      manufacturingYear: vehicleDetails.manufacturingYear,
+      registrationPlate: vehicleDetails.registrationPlate,
     },
     serviceDetails: {
-      serviceId: serviceDetails?.serviceId,
-      serviceName: serviceDetails?.serviceName,
-      startTime: serviceDetails?.startTime,
-      endTime: serviceDetails?.endTime,
-      duration: serviceDetails?.duration,
-      price: serviceDetails?.price,
-      date: serviceDetails?.date,
+      serviceName: serviceDetails.serviceName,
+      price: serviceDetails.price,
+      startTime: serviceDetails.startTime,
+      endTime: serviceDetails.endTime,
+      duration: serviceDetails.duration,
+      date: serviceDetails.date,
     },
-    totalPrice: serviceDetails?.price,
-    status: "Success",
-    paymentStatus: "Paid",
+    totalPrice: serviceDetails.price,
+    status: "Pending",
+    paymentStatus: "Pending",
     transactionId,
   });
+  // console.log(newOrder);
 
-  // Payment initiation data (integrate AmarPay here)
+  // Prepare payment data for payment gateway
   const paymentData = {
     transactionId,
     totalPrice: serviceDetails.price,
@@ -46,17 +47,17 @@ const createOrder = async (orderData: any) => {
     customerAddress: user.address,
     customerPhone: user.phone,
   };
-
-  // Initiate the payment session with AmarPay
+// console.log("Payment Data is", paymentData);
+  // Initiate payment session
   const paymentSession = await initiatePayment(paymentData);
-  console.log(paymentSession);
-  // Return payment session data to be handled in the frontend
-  return paymentSession;
+// console.log("Payment session initiated", paymentSession);
+  // Return payment session data
+  return { newOrder, paymentSession };
 };
 
 const getAllOrders = async () => {
   const orders = await Order.find();
-  if (!orders || orders.length === 0) {
+  if (!orders.length) {
     throw new AppError(httpStatus.NOT_FOUND, "No orders found");
   }
   return orders;

@@ -1,87 +1,133 @@
 import { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
+import { paymentService } from "./payment.service";
 
 const confirmationController = catchAsync(
   async (req: Request, res: Response) => {
-    const htmlResponse = `
-    <html>
-    <head>
-        <title>Payment Successful</title>
-        <style>
-            body {
-                font-family: 'Helvetica Neue', Arial, sans-serif;
-                background-color: #f4f4f4;
-                color: #333;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                padding: 20px;
-                box-sizing: border-box;
-            }
-            .container {
-                text-align: center;
-                background-color: white;
-                border-radius: 15px;
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-                padding: 50px 30px;
-                width: 350px;
-                transition: box-shadow 0.3s, transform 0.3s;
-            }
-            .container:hover {
-                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-                transform: translateY(-5px);
-            }
-            h1 {
-                color: #517de9;
-                font-size: 2.2em;
-                margin-bottom: 20px;
-                font-weight: bold;
-            }
-            p {
-                margin: 15px 0;
-                font-size: 1.1em;
-                line-height: 1.6;
-            }
-            .btn {
-                background-color: #517de9;
-                color: white;
-                padding: 12px 18px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                text-decoration: none;
-                font-size: 1em;
-                transition: background-color 0.3s, transform 0.3s;
-            }
-            .btn:hover {
-                background-color: #475cbf;
-                transform: scale(1.05);
-            }
-            @media (max-width: 480px) {
-                .container {
-                    width: 90%;
-                }
-                h1 {
-                    font-size: 1.8em;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Payment Successful!</h1>
-            <p>Your payment has been processed successfully.</p>
-            <p>Thank you for choosing us!</p>
-            <a href="https://car-wash-booking-system-frontend-dusky.vercel.app/" class="btn">Back to Homepage</a>
-        </div>
-    </body>
-    </html>
-    `;
+    const { transactionId, status } = req.query;
+    console.log("Transaction ID:", transactionId);
+    console.log("Status:", status);
+    const result = await paymentService.confirmationService(
+      transactionId as string,
+      status as string
+    );
 
-    res.send(htmlResponse);
+    res.send(result ? generateSuccessHtml() : generateFailureHtml());
   }
 );
+
+const generateSuccessHtml = () => `
+  <html>
+    <head>
+      <title>Payment Successful</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f0f8f5;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+        .container {
+          text-align: center;
+          background-color: #ffffff;
+          padding: 40px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+          color: #4CAF50;
+        }
+        p {
+          font-size: 18px;
+          color: #333;
+        }
+        a {
+          text-decoration: none;
+          color: #ffffff;
+          background-color: #4CAF50;
+          padding: 10px 20px;
+          border-radius: 5px;
+          transition: background-color 0.3s ease;
+        }
+        a:hover {
+          background-color: #45a049;
+        }
+        .icon {
+          font-size: 50px;
+          color: #4CAF50;
+          margin-bottom: 20px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="icon">✔️</div>
+        <h1>Payment Successful!</h1>
+        <p>Thank you for your payment. Your transaction was successful.</p>
+        <a href="https://car-wash-booking-system-eight.vercel.app/">Back to Homepage</a>
+      </div>
+    </body>
+  </html>
+`;
+
+const generateFailureHtml = () => `
+  <html>
+    <head>
+      <title>Payment Failed</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #fff4f4;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+        .container {
+          text-align: center;
+          background-color: #ffffff;
+          padding: 40px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+          color: #f44336;
+        }
+        p {
+          font-size: 18px;
+          color: #333;
+        }
+        a {
+          text-decoration: none;
+          color: #ffffff;
+          background-color: #f44336;
+          padding: 10px 20px;
+          border-radius: 5px;
+          transition: background-color 0.3s ease;
+        }
+        a:hover {
+          background-color: #d32f2f;
+        }
+        .icon {
+          font-size: 50px;
+          color: #f44336;
+          margin-bottom: 20px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="icon">❌</div>
+        <h1>Payment Failed!</h1>
+        <p>There was an issue processing your payment. Please try again.</p>
+        <a href="https://car-wash-booking-system-eight.vercel.app/">Back to Homepage</a>
+      </div>
+    </body>
+  </html>
+`;
 
 export const paymentController = { confirmationController };

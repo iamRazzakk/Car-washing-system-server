@@ -8,12 +8,11 @@ import { logingRouter } from "./modules/auth/auth.routes";
 const app: Application = express();
 // parser
 app.use(express.json());
-app.use(
-  cors({
-    origin: "https://car-wash-booking-system-frontend-dusky.vercel.app",
+app.use(cors({
+    origin: "https://car-wash-booking-system-eight.vercel.app",
+    // origin: "http://localhost:5173",
     credentials: true,
-  })
-);
+  }));
 app.use(cookieParser());
 // this is the main route for this application
 app.use("/api", Routers);

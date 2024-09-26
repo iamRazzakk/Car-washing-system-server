@@ -14,6 +14,8 @@ export default {
   STORE_ID: process.env.STORE_ID,
   SIGNATURE_KEY: process.env.SIGNATURE_KEY,
   PAYMENT_URL: process.env.PAYMENT_URL,
+  PAYMENT_VERIFY_URL:process.env.PAYMENTVERIFY_URL,
+  BASE_URL:process.env.BASE_URL,
   IMGBB_API_KEY: process.env.IMGBBAPIKEY,
   IMGBB_API_URL: "https://api.imgbb.com/1/upload",
 };
