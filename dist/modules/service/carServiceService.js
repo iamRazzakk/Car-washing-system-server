@@ -47,9 +47,10 @@ const getAllCarServiceFromDB = () => __awaiter(void 0, void 0, void 0, function*
 });
 // update single car service from database
 const updateSingleCarServiceIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const serviceData = yield carServiceModel_1.CarServiceModel.findByIdAndUpdate(id, payload, {
+    const serviceData = yield carServiceModel_1.CarServiceModel.findOneAndUpdate({ _id: id }, payload, {
         new: true,
         runValidators: true,
+        upsert: false,
     });
     if (!serviceData) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Data Not Found");

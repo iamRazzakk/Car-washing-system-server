@@ -38,7 +38,7 @@ const getAllCarServiceFromDB = async () => {
 // update single car service from database
 const updateSingleCarServiceIntoDB = async (id: string,
     payload: Partial<TCreateService>,) => {
-    const serviceData = await CarServiceModel.findByIdAndUpdate(id,
+    const serviceData = await CarServiceModel.findOneAndUpdate({_id:id},
         payload, {
         new: true,
         runValidators: true,
