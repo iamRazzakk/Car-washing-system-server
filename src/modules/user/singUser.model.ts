@@ -24,16 +24,23 @@ const userSchema = new Schema<TSingUpUser>(
     phone: {
       type: String,
       required: [true, "Phone number is required"],
-      trim: true,
       unique: true,
+      trim: true, // Ensures no spaces
+      validate: {
+        validator: function (v: string) {
+          return /^0[0-9]{9,14}$/.test(v); // Validate phone starts with 0 and is 10-15 digits long
+        },
+        message: "Phone number must start with 0 and be valid.",
+      },
     },
+
     role: {
       type: String,
       enum: ["ADMIN", "USER"],
-      default:"USER",
+      default: "USER",
       trim: true,
     },
-    address: { type: String, trim:true, required:[true, "Address is required"] },
+    address: { type: String, trim: true, required: [true, "Address is required"] },
     passwordCreatedAt: {
       type: Date,
       trim: true,

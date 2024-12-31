@@ -8,6 +8,7 @@ const createUser = async (userData: TSingUpUser) => {
     try {
         // Create the user
         const newUser = await UserModel.create(userData);
+        // console.log(newUser);
         return newUser;
     } catch (error) {
         console.error('Failed to create user:', error);
