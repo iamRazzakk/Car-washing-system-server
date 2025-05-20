@@ -44,13 +44,13 @@ const createOrder = async (orderData: any) => {
     totalPrice: serviceDetails.price,
     customerName: user.name,
     customerEmail: user.email,
-    customerAddress: user.address,
+    customerAddress: user.address || user.location,
     customerPhone: user.phone,
   };
-// console.log("Payment Data is", paymentData);
+  // console.log("Payment Data is", paymentData);
   // Initiate payment session
   const paymentSession = await initiatePayment(paymentData);
-// console.log("Payment session initiated", paymentSession);
+  // console.log("Payment session initiated", paymentSession);
   // Return payment session data
   return { newOrder, paymentSession };
 };

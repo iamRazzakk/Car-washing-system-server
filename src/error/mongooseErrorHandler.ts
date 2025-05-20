@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IErrorResponse, TErrorSources } from "../interface/error.interface";  
+import { IErrorResponse, TErrorSources } from "../interface/error.interface";
 
 const mongooseErrorHandler = (
     err: mongoose.Error.ValidationError,
@@ -16,9 +16,8 @@ const mongooseErrorHandler = (
     return {
         statusCode: statusCode,
         message: "Validation Error",
-        errorSources, 
+        errorSources,
     };
 };
 
 export const MongooseErrorHandler = mongooseErrorHandler;
-

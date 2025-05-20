@@ -2,42 +2,56 @@ import bcrypt from "bcryptjs";
 import { UserModel } from "../user/singUser.model";
 import { TChangePassoword, TUserLogin } from "./auth.interface";
 // import config, { cloudinaryConfig } from "../../config";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import config from "../../config";
 // import axios from "axios";
 const LoginUser = async (loginData: TUserLogin) => {
   const { email, password } = loginData;
 
-  // Trim email to avoid issues with spaces
+  // Trim inputs
   const trimmedEmail = email.trim();
+  const trimmedPassword = password.trim();
 
+  // Check user existence
   const user = await UserModel.findOne({ email: trimmedEmail }).select(
     "+password"
   );
-
   if (!user) {
     throw new Error("Invalid email or password");
   }
 
-  // Compare the trimmed password
-  const isMatch = await bcrypt.compare(password.trim(), user.password);
-  if (!isMatch) {
+  // Validate password
+  const isPasswordMatch = await bcrypt.compare(trimmedPassword, user.password);
+  if (!isPasswordMatch) {
     throw new Error("Invalid email or password");
   }
 
+  // Generate Access Token
   const accessToken = jwt.sign(
     { _id: user._id, email: user.email, role: user.role },
     config.JWT_SECRET as string,
-    { expiresIn: config.JWT_E_IN as string }
+    { expiresIn: config.JWT_E_IN } as SignOptions
   );
+
+  // Generate Refresh Token
 
   const refreshToken = jwt.sign(
     { _id: user._id, email: user.email, role: user.role },
     config.REFRESH_JWT_SECRET as string,
-    { expiresIn: config.JWT_R_IN as string }
+    { expiresIn: config.JWT_R_IN } as SignOptions
   );
 
-  return { user, accessToken, refreshToken };
+  return {
+    user: {
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+      location: user.address || location,
+    },
+    accessToken,
+    refreshToken,
+  };
 };
 
 const passwordChangeIntoDB = async (payload: TChangePassoword) => {
@@ -56,19 +70,22 @@ const passwordChangeIntoDB = async (payload: TChangePassoword) => {
 
   const hashedNewPassword = await bcrypt.hash(newPassword, 12);
 
-  await UserModel.findByIdAndUpdate(user._id, { password: hashedNewPassword }, { new: true });
+  await UserModel.findByIdAndUpdate(
+    user._id,
+    { password: hashedNewPassword },
+    { new: true }
+  );
 
   const updatedUser = await UserModel.findById(user._id);
 
-return {
+  return {
     success: true,
     message: "Password changed successfully",
-    updatedUser
+    updatedUser,
   };
 };
 
-
-// todo upload img in cloudenary file 
+// todo upload img in cloudenary file
 
 // const uploadImageToImgBB = async (imageBuffer) => {
 //   try {

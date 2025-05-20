@@ -1,38 +1,54 @@
-import {  Request, Response } from "express";
+import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import config from "../../config";
+import catchAsync from "../../utils/catchAsync";
 // import multer from "multer";
 // const storage = multer.memoryStorage();
 // const upload = multer({ storage });
 
-const AuthLoginController = async (req: Request, res: Response) => {
-  try {
-    const loginData = req.body;
-    const result = await AuthService.LoginUser(loginData);
-    const { refreshToken } = result;
-    res.cookie("refreshToke", refreshToken, {
-      secure: config.NODE_DEV === "production",
-      httpOnly: true,
-    });
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "User login successfully",
-      accessToke: result.accessToken,
-      // refreshToke: result.refreshToken,
-      data: result.user,
-    });
-  } catch (error) {
-    sendResponse(res, {
-      statusCode: httpStatus.UNAUTHORIZED,
-      success: false,
-      message: "Failed to login user",
-      data: error,
-    });
-  }
-};
+const AuthLoginController = catchAsync(async (req: Request, res: Response) => {
+  const loginData = req.body;
+  const result = await AuthService.LoginUser(loginData);
+  const { refreshToken } = result;
+  res.cookie("refreshToke", refreshToken, {
+    secure: config.NODE_DEV === "production",
+    httpOnly: true,
+  });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User login successfully",
+    accessToke: result.accessToken,
+    refreshToke: result.refreshToken,
+    data: result.user,
+  });
+});
+// try {
+//   const loginData = req.body;
+//   const result = await AuthService.LoginUser(loginData);
+//   const { refreshToken } = result;
+//   res.cookie("refreshToke", refreshToken, {
+//     secure: config.NODE_DEV === "production",
+//     httpOnly: true,
+//   });
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "User login successfully",
+//     accessToke: result.accessToken,
+//     // refreshToke: result.refreshToken,
+//     data: result.user,
+//   });
+// } catch (error) {
+//   sendResponse(res, {
+//     statusCode: httpStatus.UNAUTHORIZED,
+//     success: false,
+//     message: "Failed to login user",
+//     data: error,
+//   });
+// }
 
 const authPasswordChange = async (req: Request, res: Response) => {
   try {
@@ -58,7 +74,6 @@ const authPasswordChange = async (req: Request, res: Response) => {
   }
 };
 
-
 // const uploadImage = async (req:Request, res:Response) => {
 //   if (!req.file) {
 //     return res.status(400).json({ message: 'No file uploaded.' });
@@ -75,10 +90,6 @@ const authPasswordChange = async (req: Request, res: Response) => {
 //     res.status(500).json({ message: 'Failed to upload image.' });
 //   }
 // };
-
-
-
-
 
 // const refreshToken = async (req: Request, res: Response) => {
 //   try {
@@ -101,9 +112,6 @@ const authPasswordChange = async (req: Request, res: Response) => {
 //     });
 //   }
 // };
-
-
-
 
 export const AuthContoller = {
   AuthLoginController,

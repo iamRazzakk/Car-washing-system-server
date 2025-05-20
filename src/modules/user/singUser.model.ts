@@ -17,18 +17,16 @@ const userSchema = new Schema<TSingUpUser>(
     },
     password: {
       type: String,
-      required: [true, "Passowrd is required"],
+      required: [true, "Password is required"],
       select: false,
       trim: true,
     },
     phone: {
       type: String,
       required: [true, "Phone number is required"],
-      unique: true,
-      trim: true, // Ensures no spaces
       validate: {
-        validator: function (v: string) {
-          return /^0[0-9]{9,14}$/.test(v); // Validate phone starts with 0 and is 10-15 digits long
+        validator: function (value: string) {
+          return /^0\d{10}$/.test(value); // Must start with 0 and be 11 digits
         },
         message: "Phone number must start with 0 and be valid.",
       },
@@ -40,7 +38,11 @@ const userSchema = new Schema<TSingUpUser>(
       default: "USER",
       trim: true,
     },
-    address: { type: String, trim: true, required: [true, "Address is required"] },
+    address: {
+      type: String,
+      trim: true,
+      required: [true, "Address is required"],
+    },
     passwordCreatedAt: {
       type: Date,
       trim: true,

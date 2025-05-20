@@ -3,7 +3,6 @@ import { verifyPayment } from "./payment.utils";
 
 const confirmationService = async (transactionId: string, status: string) => {
   const verifyResponse = await verifyPayment(transactionId);
-  console.log(verifyResponse, "alsdkjflasdkjf");
   // Check if the payment verification response is successful and the status matches "successful"
   if (
     verifyResponse &&
