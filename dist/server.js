@@ -17,6 +17,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
 const config_1 = __importDefault(require("./config"));
 const AppError_1 = __importDefault(require("./error/AppError"));
+// For local development
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -30,4 +31,28 @@ function main() {
         }
     });
 }
-main();
+// For Vercel deployment - export the app with database connection
+let isConnected = false;
+const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
+    if (isConnected) {
+        return;
+    }
+    try {
+        yield mongoose_1.default.connect(config_1.default.URL);
+        isConnected = true;
+        console.log('Connected to MongoDB');
+    }
+    catch (error) {
+        console.error('Database connection error:', error);
+        throw new AppError_1.default(500, `Database connection error: ${error}`);
+    }
+});
+// Export for Vercel
+exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield connectToDatabase();
+    return (0, app_1.default)(req, res);
+});
+// Run locally if not in Vercel environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    main();
+}
