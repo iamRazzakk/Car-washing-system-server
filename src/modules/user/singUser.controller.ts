@@ -36,23 +36,14 @@ const editUserRole = catchAsync(async (req: Request, res: Response) => {
 });
 
 // get all user
-const getUserList = async (req: Request, res: Response) => {
-  try {
+const getUserList = catchAsync(async (req: Request, res: Response) => {
     const users = await UserModel.find();
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: "Users fetched successfully",
       data: users,
-    });
-  } catch (error) {
-    sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
-      success: false,
-      message: "Failed to fetch users",
-      data: error,
-    });
-  }
-};
+  });
+});
 
 export const userController = { createUser, editUserRole, getUserList };
