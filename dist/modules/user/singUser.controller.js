@@ -43,23 +43,13 @@ const editUserRole = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     });
 }));
 // get all user
-const getUserList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const users = yield singUser_model_1.UserModel.find();
-        (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.OK,
-            success: true,
-            message: "Users fetched successfully",
-            data: users,
-        });
-    }
-    catch (error) {
-        (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.BAD_REQUEST,
-            success: false,
-            message: "Failed to fetch users",
-            data: error,
-        });
-    }
-});
+const getUserList = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield singUser_model_1.UserModel.find();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Users fetched successfully",
+        data: users,
+    });
+}));
 exports.userController = { createUser, editUserRole, getUserList };
