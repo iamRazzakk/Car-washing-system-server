@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 import AppError from "../../error/AppError";
 import { TCreateService } from "./carServiceInterface";
 import { CarServiceModel } from "./carServiceModel";
-import QueryBuilder from "../../builder/queryBuilder";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 const createCarServiceIntoDB = async (payload: TCreateService) => {
   const { name, description, price, duration, isDeleted, image } = payload;

@@ -48,6 +48,7 @@ const LoginUser = async (loginData: TUserLogin) => {
       role: user.role,
       name: user.name,
       location: user.address || location,
+      phone: user.phone,
     },
     accessToken,
     refreshToken,

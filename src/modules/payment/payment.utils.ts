@@ -1,5 +1,5 @@
 import axios from "axios";
-import config from "../../config";
+import config from "../../config/index";
 
 // Initiate payment session with the payment gateway (AmarPay)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,7 +8,7 @@ export const initiatePayment = async (paymentData: any) => {
     store_id: config.STORE_ID,
     signature_key: config.SIGNATURE_KEY,
     tran_id: paymentData.transactionId,
-    success_url: `${config.BASE_URL}/api/payment/confirmation?transactionId=${paymentData.transactionId}&status=success`,
+    success_url: `${config.SUCCESS_URL}/api/payment/confirmation?transactionId=${paymentData.transactionId}&status=success`,
     fail_url: `${config.BASE_URL}/api/payment/confirmation?transactionId=${paymentData.transactionId}&status=failure`,
     cancel_url: `${config.BASE_URL}`,
     amount: paymentData.totalPrice,
@@ -20,7 +20,6 @@ export const initiatePayment = async (paymentData: any) => {
     cus_phone: paymentData.customerPhone,
     type: "json",
   });
-
   return response.data;
 };
 
@@ -30,7 +29,7 @@ export const verifyPayment = async (transactionId: string) => {
     params: {
       store_id: config.STORE_ID,
       signature_key: config.SIGNATURE_KEY,
-      type:"json",
+      type: "json",
       request_id: transactionId,
     },
   });
